@@ -1,22 +1,30 @@
 #pragma once
 
 #include <Eigen/Dense>
+#include <Eigen/src/Core/util/Constants.h>
+
 
 #include <string>
 #include <vector>
 
-const int DIMENSION = 3;
+const int DIMENSION = 2;
 using num_t = double;
-using NumericalVector = Eigen::Array<num_t, DIMENSION, 1>;
+using NumericalVectorList = Eigen::Array<num_t, DIMENSION, Eigen::Dynamic>;
+using coordinate_name_map = std::vector<std::string>;
 
-class Coordinates : public NumericalVector {
+
+class Coordinates : public NumericalVectorList {
 public:
-	using NumericalVector::NumericalVector;
+	using NumericalVectorList::NumericalVectorList;
 
-	static void push_coordinate(std::string name);
+	static Coordinates Zero();
+	
 
+	static void set_coordinates_by_names(coordinate_name_map names);
+	static coordinate_name_map get_coordinate_names() {return coordinate_names;}
 
 private:
-	static std::vector<std::string> coordinate_names;
+	static coordinate_name_map coordinate_names;
+	static int num_coords() {return coordinate_names.size();}
 };
 

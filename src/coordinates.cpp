@@ -1,7 +1,13 @@
 #include <SPH/coordinates.hpp>
 
-std::vector<std::string> Coordinates::coordinate_names = {};
+coordinate_name_map Coordinates::coordinate_names = {};
 
-void Coordinates::push_coordinate(std::string name){
-	Coordinates::coordinate_names.push_back(name);
+void Coordinates::set_coordinates_by_names(coordinate_name_map names)
+{
+	Coordinates::coordinate_names = names;
+}
+
+Coordinates Coordinates::Zero() 
+{
+		return NumericalVectorList::Zero(DIMENSION, Coordinates::num_coords());
 }

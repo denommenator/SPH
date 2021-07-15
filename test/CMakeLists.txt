@@ -20,4 +20,4 @@ target_link_libraries(coordinates_test PRIVATE SPH_library Catch2::Catch2 Eigen3
 add_test(NAME coordinatestest COMMAND coordinates_test) # Command can be a target
 
 #Denomme feature to turn on verbose ctest output
-set(CMAKE_CTEST_ARGUMENTS "-s;--output-on-failure")
+set(CMAKE_CTEST_ARGUMENTS "--rerun-failed;--output-on-failure")
