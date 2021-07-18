@@ -25,5 +25,13 @@ Coordinates Coordinates::Zero()
 		return NumericalVectorArray::Zero(DIMENSION, Coordinates::num_coords());
 }
 
+int Coordinates::get_coordinate_id(std::string name)
+{
+	return coordinate_names[name];
+}
 
-
+Coordinate& Coordinates::operator[](std::string name)
+{
+	int coordinate_index = coordinate_names[name];
+	return (*this).block(0 , coordinate_index, DIMENSION, 1);
+}

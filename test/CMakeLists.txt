@@ -7,17 +7,20 @@ FetchContent_MakeAvailable(catch)
 # Adds Catch2::Catch2
 
 # Tests need to be added as executables first
-add_executable(coordinates_test coordinates_test.cpp)
+add_executable(test_main 
+					test_main.cpp 
+					coordinates_test.cpp
+					)
 
 # I'm using C++17 in the test
-target_compile_features(coordinates_test PRIVATE cxx_std_17)
+target_compile_features(test_main PRIVATE cxx_std_17)
 
 # Should be linked to the main library, as well as the Catch2 testing library
-target_link_libraries(coordinates_test PRIVATE SPH_library Catch2::Catch2 Eigen3::Eigen)
+target_link_libraries(test_main PRIVATE SPH_library Catch2::Catch2 Eigen3::Eigen)
 
 # If you register a test, then ctest and make test will run it.
 # You can also run examples and check the output, as well.
-add_test(NAME coordinatestest COMMAND coordinates_test) # Command can be a target
+add_test(NAME test_main COMMAND test_main) # Command can be a target
 
 #Denomme feature to turn on verbose ctest output
 set(CMAKE_CTEST_ARGUMENTS "--rerun-failed;--output-on-failure")
