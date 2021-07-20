@@ -24,7 +24,7 @@ using NumericalVectorArray = Eigen::Array<num_t, DIMENSION, Eigen::Dynamic>;
 class CoordinateIDManager
 {
 public:
-	CoordinateIDManager(std::initializer_list<std::string> names);
+	CoordinateIDManager(const std::initializer_list<std::string> &names);
 
 
 	int size();
@@ -46,8 +46,7 @@ class Coordinates : public NumericalVectorArray
 public:
 
 	Coordinates(CoordinateIDManager ids);
-	Coordinates(std::initializer_list<std::string> names);
-
+	
 	friend bool operator==(const Coordinates &qs, const Coordinates &qs_other);
 
 	static Coordinates Zero();

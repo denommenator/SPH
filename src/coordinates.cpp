@@ -4,7 +4,7 @@
 
 
 
-CoordinateIDManager::CoordinateIDManager(std::initializer_list<std::string> names)
+CoordinateIDManager::CoordinateIDManager(const std::initializer_list<std::string> &names)
 {
 	int i=0;
 	for (auto name : names)
@@ -44,9 +44,6 @@ Coordinates::Coordinates(CoordinateIDManager ids)
 	coordinate_matrix{DIMENSION, ids.size()}
 {}
 
-Coordinates::Coordinates(std::initializer_list<std::string> names)
-:	Coordinates{CoordinateIDManager(names)}
-{}
 
 
 NumericalVectorArray::ColXpr Coordinates::operator[](std::string name)

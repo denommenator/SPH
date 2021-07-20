@@ -14,7 +14,7 @@ SCENARIO("we can initialize a state vector")
 	SECTION("We can initialize a state vector from qs and q_dots")
 	{
 		CoordinateIDManager ids= {"01", "02", "03"};
-		Coordinates qs{ids}, q_dots{ids}, q_not{ids};
+		Coordinates qs{ids}, q_dots{ids}, q_not{{"01", "02", "03"}};
 
 		qs["01"] << 0,1;
 		qs["02"] << 2,3;
