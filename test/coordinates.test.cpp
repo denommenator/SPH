@@ -9,7 +9,7 @@
 #include <vector>
 
 
-SCENARIO("Coordinates can be read in")
+SCENARIO("Coordinates can be initialized from a CoordinateIDManager")
 {
 	
 	CoordinateIDManager ids = {"01", "02"};

@@ -32,6 +32,11 @@ std::string CoordinateIDManager::operator[](int id)
 	return coordinate_names[id];
 }
 
+bool operator==(const CoordinateIDManager &ids, const CoordinateIDManager &other_ids)
+{
+	return ids.coordinate_names == other_ids.coordinate_names;
+}
+
 
 
 Coordinates::Coordinates(CoordinateIDManager ids)
@@ -39,9 +44,19 @@ Coordinates::Coordinates(CoordinateIDManager ids)
 	coordinate_matrix{DIMENSION, ids.size()}
 {}
 
+Coordinates::Coordinates(std::initializer_list<std::string> names)
+:	Coordinates{CoordinateIDManager(names)}
+{}
+
 
 NumericalVectorArray::ColXpr Coordinates::operator[](std::string name)
 {
 	int index = coordinate_ids[name];
 	return coordinate_matrix.col(index);
+}
+
+
+bool operator==(const Coordinates &qs, const Coordinates &qs_other)
+{
+	return (qs.coordinate_ids == qs_other.coordinate_ids) && ( qs.coordinate_matrix.isApprox(qs_other.coordinate_matrix) );
 }

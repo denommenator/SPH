@@ -31,6 +31,8 @@ public:
 	int operator[](std::string name);
 	std::string operator[](int id);
 
+	friend bool operator==(const CoordinateIDManager &ids, const CoordinateIDManager &other_ids);
+
 
 	std::map<std::string, int> coordinate_id_map;
 	//names kept in order: id == coordinate_id_map[coordinate_names[id]]
@@ -44,6 +46,9 @@ class Coordinates : public NumericalVectorArray
 public:
 
 	Coordinates(CoordinateIDManager ids);
+	Coordinates(std::initializer_list<std::string> names);
+
+	friend bool operator==(const Coordinates &qs, const Coordinates &qs_other);
 
 	static Coordinates Zero();
 	//Eigen::Block<coordinate_matrix.derived(), DIMENSION, 1>& operator[](std::string name);
