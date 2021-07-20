@@ -11,8 +11,10 @@
 
 SCENARIO("Coordinates can be read in")
 {
-	std::set<std::string> names = {"01", "02"};
-	Coordinates qs(names);
+	
+	CoordinateIDManager ids = {"01", "02"};
+	//std::set<std::string> names = {"01", "02"};
+	Coordinates qs(ids);
 	qs["01"] << 1,2;
 	qs["02"] << 3,4;
 	

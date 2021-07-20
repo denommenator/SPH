@@ -4,36 +4,44 @@
 
 
 
-void Coordinates::set_coordinate_id_map(std::set<std::string> names)
+CoordinateIDManager::CoordinateIDManager(std::initializer_list<std::string> names)
 {
 	int i=0;
 	for (auto name : names)
 	{
+		coordinate_names.push_back(name);
 		coordinate_id_map[name]=i;
 		i++;
 	}
 }
 
 
-Coordinates::Coordinates(std::set<std::string> names)
+int CoordinateIDManager::size()
 {
-	coordinate_names = names;
-	set_coordinate_id_map(names);
-	coordinate_matrix = NumericalVectorArray(DIMENSION, names.size());
-
-
+	return coordinate_id_map.size();
 }
 
-// Coordinates& Coordinates::operator<<(Eigen::CommaInitializer<NumericalVectorArray> q)
-// {
-// 	int index = coordinate_id_map[current_coordinate_name];
-// 	coordinate_matrix.col(index) << q;
-// 	return (*this);
-// }
 
-// Eigen::Block<NumericalVectorArray, DIMENSION, 1>& Coordinates::operator[](std::string name)
-// {
-// 	int index = coordinate_id_map[name];
-// 	return coordinate_matrix.col(index);
-// }
+int CoordinateIDManager::operator[](std::string name)
+{
+	return coordinate_id_map[name];
+}
 
+std::string CoordinateIDManager::operator[](int id)
+{
+	return coordinate_names[id];
+}
+
+
+
+Coordinates::Coordinates(CoordinateIDManager ids)
+:	coordinate_ids{ids},
+	coordinate_matrix{DIMENSION, ids.size()}
+{}
+
+
+NumericalVectorArray::ColXpr Coordinates::operator[](std::string name)
+{
+	int index = coordinate_ids[name];
+	return coordinate_matrix.col(index);
+}
