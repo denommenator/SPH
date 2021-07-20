@@ -1,37 +1,39 @@
 #include <SPH/coordinates.hpp>
+#include <initializer_list>
 
-coordinate_name_map Coordinates::coordinate_names = {};
 
-void Coordinates::set_coordinates_by_names(std::set<std::string> names)
+
+
+void Coordinates::set_coordinate_id_map(std::set<std::string> names)
 {
-	
-	Coordinates::coordinate_names = {};
 	int i=0;
-	for(auto name : names)
-		Coordinates::coordinate_names.insert(std::make_pair(name, i++));
+	for (auto name : names)
+	{
+		coordinate_id_map[name]=i;
+		i++;
+	}
 }
 
-std::set<std::string> Coordinates::get_coordinate_names() 
+
+Coordinates::Coordinates(std::set<std::string> names)
 {
-	std::set<std::string> names ={};
-	for (auto pair : coordinate_names)
-		names.insert(pair.first);
+	coordinate_names = names;
+	set_coordinate_id_map(names);
+	coordinate_matrix = NumericalVectorArray(DIMENSION, names.size());
 
-	return names;
+
 }
 
-Coordinates Coordinates::Zero() 
-{
-		return NumericalVectorArray::Zero(DIMENSION, Coordinates::num_coords());
-}
+// Coordinates& Coordinates::operator<<(Eigen::CommaInitializer<NumericalVectorArray> q)
+// {
+// 	int index = coordinate_id_map[current_coordinate_name];
+// 	coordinate_matrix.col(index) << q;
+// 	return (*this);
+// }
 
-int Coordinates::get_coordinate_id(std::string name)
-{
-	return coordinate_names[name];
-}
+// Eigen::Block<NumericalVectorArray, DIMENSION, 1>& Coordinates::operator[](std::string name)
+// {
+// 	int index = coordinate_id_map[name];
+// 	return coordinate_matrix.col(index);
+// }
 
-Coordinate& Coordinates::operator[](std::string name)
-{
-	int coordinate_index = coordinate_names[name];
-	return (*this).block(0 , coordinate_index, DIMENSION, 1);
-}

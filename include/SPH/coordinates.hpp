@@ -8,55 +8,40 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <initializer_list>
 
 
 
 const int DIMENSION = 2;
 using num_t = double;
-using Coordinate = Eigen::Array<num_t, Eigen::Dynamic, Eigen::Dynamic>;
+using Coordinate = Eigen::Array<num_t, DIMENSION, 1>;
 using NumericalVectorArray = Eigen::Array<num_t, DIMENSION, Eigen::Dynamic>;
-using coordinate_name_map = std::map<std::string, int>;
 
+using NumericalVectorColumn = NumericalVectorArray::ColXpr;
 
 class Coordinates : public NumericalVectorArray 
 {
 public:
-	
 
-	Coordinates(void) 
-		: NumericalVectorArray{DIMENSION, num_coords()}
-	{}
-
-	
+	Coordinates(std::set<std::string> names);
 
 	static Coordinates Zero();
+	//Eigen::Block<coordinate_matrix.derived(), DIMENSION, 1>& operator[](std::string name);
+
+	NumericalVectorColumn operator[](std::string name)
+	{
+		int index = coordinate_id_map[name];
+		return coordinate_matrix.col(index);
+	}
+
+	
 	
 
-	static void set_coordinates_by_names(std::set<std::string> names);
-	static std::set<std::string> get_coordinate_names();
+	std::set<std::string> coordinate_names;
+	std::map<std::string, int> coordinate_id_map;
+	NumericalVectorArray coordinate_matrix;
+	std::string current_coordinate_name;
 
-	Coordinate& operator[](std::string name);
-
-	static int get_coordinate_id(std::string name);
-
-
-//private:
-	//using NumericalVectorArray::NumericalVectorArray;
-	
-	// This constructor allows you to construct MyVectorType from Eigen expressions
-    template<typename OtherDerived>
-    Coordinates(const Eigen::ArrayBase<OtherDerived>& other)
-        : NumericalVectorArray(other)
-    { }
-
-	template<typename OtherDerived>
-    Coordinates& operator=(const Eigen::ArrayBase <OtherDerived>& other)
-    {
-        this->NumericalVectorArray::operator=(other);
-        return *this;
-    }
-
-	static coordinate_name_map coordinate_names;
-	static int num_coords() {return coordinate_names.size();}
+	void set_coordinate_id_map(std::set<std::string> names);
 };
 

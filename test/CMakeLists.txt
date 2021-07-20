@@ -9,7 +9,8 @@ FetchContent_MakeAvailable(catch)
 # Tests need to be added as executables first
 add_executable(test_main 
 					test_main.cpp 
-					coordinates_test.cpp
+					coordinates.test.cpp
+					state.test.cpp
 					)
 
 # I'm using C++17 in the test
@@ -20,7 +21,6 @@ target_link_libraries(test_main PRIVATE SPH_library Catch2::Catch2 Eigen3::Eigen
 
 # If you register a test, then ctest and make test will run it.
 # You can also run examples and check the output, as well.
-add_test(NAME test_main COMMAND test_main) # Command can be a target
+add_test(NAME test_main 
+		COMMAND test_main --success) 
 
-#Denomme feature to turn on verbose ctest output
-set(CMAKE_CTEST_ARGUMENTS "--rerun-failed;--output-on-failure")
