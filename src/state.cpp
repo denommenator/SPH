@@ -3,10 +3,15 @@
 
 
 
+namespace SPH
+{
+
 
 Coordinates State::get_acceleration()
 {
 	int N = qs.coordinate_ids.size();
 
 	return qs;
+}
+
 }
