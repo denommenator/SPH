@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 
+using namespace SPH;
 
 SCENARIO("we can initialize a state vector")
 {

@@ -2,7 +2,9 @@
 
 #include "coordinates.hpp"
 
-
+namespace SPH
+{
+	
 class State
 {
 public:
@@ -17,3 +19,6 @@ public:
 
 
 };
+
+
+}

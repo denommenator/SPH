@@ -1,7 +1,7 @@
 #include <SPH/coordinates.hpp>
 #include <initializer_list>
 
-
+namespace SPH{
 
 
 CoordinateIDManager::CoordinateIDManager(const std::initializer_list<std::string> &names)
@@ -56,4 +56,6 @@ NumericalVectorArray::ColXpr Coordinates::operator[](std::string name)
 bool operator==(const Coordinates &qs, const Coordinates &qs_other)
 {
 	return (qs.coordinate_ids == qs_other.coordinate_ids) && ( qs.coordinate_matrix.isApprox(qs_other.coordinate_matrix) );
+}
+
 }
