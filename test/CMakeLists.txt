@@ -6,11 +6,13 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(catch)
 # Adds Catch2::Catch2
 
+file(GLOB TEST_SOURCE_LIST CONFIGURE_DEPENDS "${SPH_SOURCE_DIR}/test/*.test.cpp")
+
+
 # Tests need to be added as executables first
 add_executable(test_main 
 					test_main.cpp 
-					coordinates.test.cpp
-					state.test.cpp
+					${TEST_SOURCE_LIST}
 					)
 
 # I'm using C++17 in the test
