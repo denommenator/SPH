@@ -8,6 +8,7 @@
 
 #include <vector>
 
+using namespace SPH;
 
 SCENARIO("Coordinates can be initialized from a CoordinateIDManager")
 {

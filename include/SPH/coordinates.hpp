@@ -11,6 +11,8 @@
 #include <initializer_list>
 
 
+namespace SPH
+{
 
 const int DIMENSION = 2;
 using num_t = double;
@@ -60,3 +62,4 @@ public:
 
 };
 
+}
