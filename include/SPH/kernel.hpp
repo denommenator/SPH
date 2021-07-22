@@ -19,11 +19,17 @@ num_t W_gaussian_(Coordinate q, Coordinate p, num_t h);
 
 Coordinate W_gaussian_gradient_q_(Coordinate q, Coordinate p, num_t h);
 
+//convenience object so that SmoothingKernel W will be callable W(q,p,h) and have a member W.gradient_q(q,p,h)
 class SmoothingKernel
 {
 public:
-	virtual num_t operator()(Coordinate q, Coordinate p, num_t h);
+	SmoothingKernel(SmoothingKernel_t W, SmoothingKernelGradient_t W_gradient_q)
+	:W{W}, gradient_q{W_gradient_q}
+	{};
 
+	virtual num_t operator()(const Coordinate &q, const Coordinate &p, const num_t &h);
+
+	SmoothingKernel_t W;
 	SmoothingKernelGradient_t gradient_q{W_gaussian_gradient_q_};
 
 

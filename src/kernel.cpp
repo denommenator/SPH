@@ -3,7 +3,7 @@
 namespace SPH
 {
 
-SmoothingKernel W_gaussian = SmoothingKernel();
+SmoothingKernel W_gaussian = SmoothingKernel(W_gaussian_, W_gaussian_gradient_q_);
 
 num_t W_gaussian_(Coordinate q, Coordinate p, num_t h)
 {
@@ -16,9 +16,9 @@ Coordinate W_gaussian_gradient_q_(Coordinate q, Coordinate p, num_t h)
 }
 
 
-num_t SmoothingKernel::operator()(Coordinate q, Coordinate p, num_t h)
+num_t SmoothingKernel::operator()(const Coordinate &q, const Coordinate &p, const num_t &h)
 {
-	return W_gaussian_(q, p, h);
+	return W(q, p, h);
 }
 
 
