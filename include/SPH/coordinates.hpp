@@ -43,7 +43,7 @@ public:
 
 
 
-class Coordinates : public NumericalVectorArray 
+class Coordinates //: public NumericalVectorArray 
 {
 public:
 
@@ -52,7 +52,7 @@ public:
 	friend bool operator==(const Coordinates &qs, const Coordinates &qs_other);
 
 	static Coordinates Zero();
-	//Eigen::Block<coordinate_matrix.derived(), DIMENSION, 1>& operator[](std::string name);
+	int size();
 
 	NumericalVectorArray::ColXpr operator[](std::string name);
 

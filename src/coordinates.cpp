@@ -58,4 +58,9 @@ bool operator==(const Coordinates &qs, const Coordinates &qs_other)
 	return (qs.coordinate_ids == qs_other.coordinate_ids) && ( qs.coordinate_matrix.isApprox(qs_other.coordinate_matrix) );
 }
 
+int Coordinates::size()
+{
+	return coordinate_ids.size();
+}
+
 }
