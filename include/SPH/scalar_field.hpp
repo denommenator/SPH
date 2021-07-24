@@ -8,13 +8,11 @@
 namespace SPH
 {
 
-using NumericalScalarArray  = Eigen::Array<num_t, 1, Eigen::Dynamic>;
-
 class ScalarField
 {
 public:
 
-	ScalarField(Coordinates qs);
+	ScalarField(Coordinates qs, SmoothingKernel W = W_gaussian);
 	
 	NumericalScalarArray::ColXpr operator[](std::string name);
 
@@ -22,6 +20,7 @@ public:
 	
 	Coordinates qs;
 	NumericalScalarArray weights;
+	SmoothingKernel W;
 
 };
 

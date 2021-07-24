@@ -23,6 +23,7 @@ SCENARIO("We can initialize and evaluate a scalar field using SPH interpolation"
 
 	//F({1,2})
 	Coordinate r{1,2};
-	//F(r);
+	CAPTURE(F(r));
+	REQUIRE(F(r) == Approx(31.8523448326));
 
 }

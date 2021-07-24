@@ -5,6 +5,7 @@ namespace SPH{
 
 
 CoordinateIDManager::CoordinateIDManager(const std::initializer_list<std::string> &names)
+:coordinate_masses(NumericalScalarArray::Constant(names.size(), 1)), coordinate_densities(NumericalScalarArray::Constant(names.size(), 1))
 {
 	int i=0;
 	for (auto name : names)
@@ -63,4 +64,4 @@ int Coordinates::size()
 	return coordinate_ids.size();
 }
 
-}
+} //namespace SPH

@@ -47,4 +47,4 @@ extern ColeEOS cole_eos_default_params;
 
 
 
-}
+} //namespace SPH

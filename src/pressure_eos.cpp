@@ -27,4 +27,4 @@ ColeEOS::ColeEOS(num_t c , num_t d_0, num_t gamma )
 	{p = [c, d_0, gamma](num_t d){return cole_(d, c, d_0, gamma);};}
 
 
-}
+} //namespace SPH

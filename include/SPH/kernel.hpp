@@ -38,6 +38,6 @@ public:
 
 extern SmoothingKernel W_gaussian;
 	
-}
+} //namespace SPH
 
 

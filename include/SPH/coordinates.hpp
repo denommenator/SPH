@@ -18,7 +18,7 @@ const int DIMENSION = 2;
 using num_t = double;
 using Coordinate = Eigen::Array<num_t, DIMENSION, 1>;
 using NumericalVectorArray = Eigen::Array<num_t, DIMENSION, Eigen::Dynamic>;
-
+using NumericalScalarArray  = Eigen::Array<num_t, 1, Eigen::Dynamic>;
 
 
 
@@ -36,14 +36,17 @@ public:
 	friend bool operator==(const CoordinateIDManager &ids, const CoordinateIDManager &other_ids);
 
 
+
 	std::map<std::string, int> coordinate_id_map;
 	//names kept in order: id == coordinate_id_map[coordinate_names[id]]
 	std::vector<std::string> coordinate_names;
+	NumericalScalarArray coordinate_masses;
+	NumericalScalarArray coordinate_densities;
 };
 
 
 
-class Coordinates //: public NumericalVectorArray 
+class Coordinates 
 {
 public:
 
@@ -62,4 +65,4 @@ public:
 
 };
 
-}
+} //namespace SPH

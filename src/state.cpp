@@ -14,4 +14,4 @@ Coordinates State::get_acceleration()
 	return qs;
 }
 
-}
+} //namespace SPH

@@ -16,7 +16,7 @@ num_t cole(num_t d)
 
 SCENARIO("initialize various Cole EOS objects")
 {
-	ColeEOS rho = ColeEOS(15, 1000, 7);
+	ColeEOS p = ColeEOS(15, 1000, 7);
 
-	REQUIRE(rho(1500) == Approx(cole(1500)));
+	REQUIRE(p(1500) == Approx(cole(1500)));
 }

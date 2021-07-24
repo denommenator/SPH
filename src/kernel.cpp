@@ -22,4 +22,4 @@ num_t SmoothingKernel::operator()(const Coordinate &q, const Coordinate &p, cons
 }
 
 
-}
+} //namespace SPH
