@@ -10,6 +10,8 @@
 
 namespace SPH
 {
+namespace Kernels
+{
 	using SmoothingKernel_t = std::function<num_t (Coordinate, Coordinate, num_t)>;
 	using SmoothingKernelGradient_t = std::function<Coordinate(Coordinate, Coordinate, num_t)>;
 
@@ -37,7 +39,8 @@ public:
 };
 
 extern SmoothingKernel W_gaussian;
-	
+
+} //namespace Kernels
 } //namespace SPH
 
 

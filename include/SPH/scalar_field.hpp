@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SPH/coordinates.hpp>
-#include <SPH/kernel.hpp>
+#include <SPH/kernels.hpp>
 
 
 
@@ -12,7 +12,7 @@ class ScalarField
 {
 public:
 
-	ScalarField(Coordinates qs, SmoothingKernel W = W_gaussian);
+	ScalarField(Coordinates qs, Kernels::SmoothingKernel W = Kernels::W_gaussian);
 	
 	NumericalScalarArray::ColXpr operator[](std::string name);
 
@@ -20,7 +20,7 @@ public:
 	
 	Coordinates qs;
 	NumericalScalarArray weights;
-	SmoothingKernel W;
+	Kernels::SmoothingKernel W;
 
 };
 

@@ -4,7 +4,7 @@
 
 #include <SPH/coordinates.hpp>
 #include <SPH/scalar_field.hpp>
-#include <SPH/kernel.hpp>
+#include <SPH/kernels.hpp>
 
 using namespace SPH;
 

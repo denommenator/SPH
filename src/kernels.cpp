@@ -1,6 +1,8 @@
-#include <SPH/kernel.hpp>
+#include <SPH/kernels.hpp>
 
 namespace SPH
+{
+namespace Kernels
 {
 
 SmoothingKernel W_gaussian = SmoothingKernel(W_gaussian_, W_gaussian_gradient_q_);
@@ -22,4 +24,5 @@ num_t SmoothingKernel::operator()(const Coordinate &q, const Coordinate &p, cons
 }
 
 
+} //namespace Kernels
 } //namespace SPH

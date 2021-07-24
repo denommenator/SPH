@@ -1,5 +1,5 @@
 #include <SPH/coordinates.hpp>
-#include <SPH/kernel.hpp>
+#include <SPH/kernels.hpp>
 
 
 #include <catch2/catch.hpp>
@@ -8,6 +8,7 @@
 #include <vector>
 
 using namespace SPH;
+using namespace SPH::Kernels;
 
 SCENARIO("Evaluate the two gaussian smoothing kernel functions")
 {

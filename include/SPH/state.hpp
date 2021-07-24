@@ -1,7 +1,7 @@
 #pragma once
 
 #include "coordinates.hpp"
-#include "kernel.hpp"
+#include "kernels.hpp"
 
 namespace SPH
 {
@@ -10,7 +10,7 @@ class State
 {
 public:
 
-	State(Coordinates qs, Coordinates q_dots, SmoothingKernel W = W_gaussian)
+	State(Coordinates qs, Coordinates q_dots, Kernels::SmoothingKernel W = Kernels::W_gaussian)
 	: qs{qs}, q_dots{q_dots}, W{W}
 	{}
 
@@ -18,7 +18,7 @@ public:
 
 	Coordinates qs;
 	Coordinates q_dots;
-	SmoothingKernel W;
+	Kernels::SmoothingKernel W;
 
 
 
