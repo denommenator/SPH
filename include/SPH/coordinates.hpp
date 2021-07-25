@@ -5,6 +5,7 @@
 
 
 #include <string>
+#include <ostream>
 #include <vector>
 #include <set>
 #include <map>
@@ -64,5 +65,8 @@ public:
 	NumericalVectorArray coordinate_matrix;
 
 };
+
+
+std::ostream& operator<<(std::ostream &strm, const Coordinates &qs);
 
 } //namespace SPH

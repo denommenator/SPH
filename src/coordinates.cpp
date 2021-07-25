@@ -71,4 +71,15 @@ int Coordinates::size()
 	return coordinate_ids.size();
 }
 
+std::ostream& operator<<(std::ostream &strm, const Coordinates &qs)
+{
+	int i=0;
+	for(auto name : qs.coordinate_ids.coordinate_names)
+	{
+		strm << "\ncoordinate: \"" << name << "\":\n" << qs.coordinate_matrix.col(i);
+		i++;
+	}
+	return strm;
+}
+
 } //namespace SPH
