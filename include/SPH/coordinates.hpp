@@ -54,7 +54,7 @@ public:
 	
 	friend bool operator==(const Coordinates &qs, const Coordinates &qs_other);
 
-	static Coordinates Zero();
+	static Coordinates Zero(CoordinateIDManager ids);
 	int size();
 
 	NumericalVectorArray::ColXpr operator[](std::string name);

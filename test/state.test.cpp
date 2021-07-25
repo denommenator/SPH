@@ -35,6 +35,10 @@ SCENARIO("we can initialize a state vector")
 		REQUIRE(initial_state.q_dots == q_dots);
 		REQUIRE_FALSE(initial_state.qs == q_not);
 
+		SECTION("Acceleration can be computed:")
+		{
+			REQUIRE_FALSE(initial_state.get_acceleration() == q_not);
+		}
 
 	}
 }

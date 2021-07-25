@@ -46,6 +46,13 @@ Coordinates::Coordinates(CoordinateIDManager ids)
 {}
 
 
+Coordinates Coordinates::Zero(CoordinateIDManager ids)
+{
+	Coordinates Zero = Coordinates(ids);
+	Zero.coordinate_matrix = NumericalVectorArray::Zero(DIMENSION, ids.size());
+	return Zero;
+}
+
 
 NumericalVectorArray::ColXpr Coordinates::operator[](std::string name)
 {

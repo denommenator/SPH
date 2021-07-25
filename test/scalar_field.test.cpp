@@ -23,7 +23,7 @@ SCENARIO("We can initialize and evaluate a scalar field using SPH interpolation"
 
 	//F({1,2})
 	Coordinate r{1,2};
-	CAPTURE(F(r));
-	REQUIRE(F(r) == Approx(31.8523448326));
+	CAPTURE(F.weights, F(r));
+	REQUIRE(F(r) == Approx(F.vectorized(r)));
 
 }
