@@ -14,7 +14,7 @@ num_t W_gaussian_(Coordinate q, Coordinate p, num_t h)
 
 Coordinate W_gaussian_gradient_q_(Coordinate q, Coordinate p, num_t h)
 {
-	return  (-2) / (h*h) * W_gaussian(q,p,h) * (q-p);
+	return  (-2) / (h*h) * W_gaussian_(q,p,h) * (q-p);
 }
 
 NumericalScalarArray W_gaussian_vectorized_(Coordinates qs, Coordinate r, num_t h)
@@ -27,13 +27,19 @@ NumericalScalarArray W_gaussian_vectorized_(Coordinates qs, Coordinate r, num_t 
 	//return (-(qs_mat.matrix().colwise()-r).matrix().colwise().squaredNorm()/ (h*h) ).exp() / (h*h);
 }
 
-SmoothingKernel W_gaussian = SmoothingKernel(W_gaussian_, W_gaussian_gradient_q_, W_gaussian_vectorized_);
+SmoothingKernelVectorized W_gaussian = SmoothingKernelVectorized({W_gaussian_, W_gaussian_gradient_q_, W_gaussian_vectorized_});
 
 
-// NumericalScalarArray W_gaussian_gradient_q_vectorized(Coordinate q, Coordinate r, num_t h)
-// {
-// 	return  (-2) / (h*h) * W_gaussian(q,p,h) * (q-p);
-// }
+
+SmoothingKernel::SmoothingKernel(std::tuple<SmoothingKernel_t, SmoothingKernelGradient_t> Ws)
+:W{std::get<0>(Ws)}, gradient_q{std::get<1>(Ws)}
+{}
+
+SmoothingKernelVectorized::SmoothingKernelVectorized(std::tuple<SmoothingKernel_t, 
+																SmoothingKernelGradient_t,
+																SmoothingKernelVectorized_t> Ws)
+:SmoothingKernel{std::tie(std::get<0>(Ws), std::get<1>(Ws))}, W_vectorized{std::get<2>(Ws)}
+{}
 
 num_t SmoothingKernel::operator()(const Coordinate &q, const Coordinate &p, const num_t &h)
 {
@@ -41,7 +47,7 @@ num_t SmoothingKernel::operator()(const Coordinate &q, const Coordinate &p, cons
 }
 
 
-NumericalScalarArray SmoothingKernel::operator()(const Coordinates &qs, const Coordinate &r, const num_t &h)
+NumericalScalarArray SmoothingKernelVectorized::operator()(const Coordinates &qs, const Coordinate &r, const num_t &h)
 {
 	
 
