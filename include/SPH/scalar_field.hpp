@@ -14,44 +14,28 @@ class ScalarField
 {
 public:
 
-	ScalarField(Coordinates qs, Kernels::SmoothingKernel W = Kernels::W_gaussian);
+	ScalarField(Coordinates qs);
 	
 	NumericalScalarArray::ColXpr operator[](std::string name);
 
-	virtual num_t operator()(Coordinate r);
+	num_t operator()(Coordinate r);
+
+	num_t non_vectorized(Coordinate r);
 	
 	Coordinates qs;
 	NumericalScalarArray weights;
-	Kernels::SmoothingKernel W;
+	Kernels::SmoothingKernel W{};
 
 };
 
-class ScalarFieldVectorized: public ScalarField
-{
-public:
-	ScalarFieldVectorized(Coordinates qs, Kernels::SmoothingKernelVectorized W_vectorized = Kernels::W_gaussian);
-	Kernels::SmoothingKernelVectorized W_vectorized;
-
-	num_t operator()(Coordinate r) override;
-};
 
 
 class DensityField : public ScalarField
 {
 public:
-	DensityField(Coordinates qs, Kernels::SmoothingKernel W = Kernels::W_gaussian);
+	DensityField(Coordinates qs);
 };
 
-class DensityFieldVectorized : public ScalarFieldVectorized
-{
-public:
-	DensityFieldVectorized(Coordinates qs, Kernels::SmoothingKernelVectorized W = Kernels::W_gaussian);
-};
 
-class PressureField : public ScalarField
-{
-public:
-	PressureField(Coordinates qs, Kernels::SmoothingKernel W = Kernels::W_gaussian);
-};
 
 } // namespace SPH

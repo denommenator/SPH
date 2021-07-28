@@ -1,3 +1,4 @@
+#include "SPH/pressure_eos.hpp"
 #include <SPH/coordinates.hpp>
 #include <SPH/state.hpp>
 #include <SPH/integrators.hpp>
@@ -32,7 +33,7 @@ SCENARIO("We can initialize a state")
 
 	THEN("We can step the state forward using the integrator euler_next")
 	{
-		State next_state = Integrators::explicit_euler.next_state(initial_state, .5);
+		State next_state = Integrators::explicit_euler_next(initial_state, .5);
 	}
 
 }

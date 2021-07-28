@@ -12,7 +12,7 @@ using namespace SPH::Kernels;
 
 SCENARIO("Evaluate the two gaussian smoothing kernel functions")
 {
-	SmoothingKernel &W{W_gaussian};
+	SmoothingKernel W{};
 
 	CoordinateIDManager ids= {"01", "02", "03"};
 		Coordinates qs{ids}, q_dots{ids}, q_not{{"01", "02", "03"}};

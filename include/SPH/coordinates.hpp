@@ -30,7 +30,7 @@ public:
 	CoordinateIDManager(const std::initializer_list<std::string> &names);
 
 
-	int size();
+	int size() const;
 	int operator[](std::string name);
 	std::string operator[](int id);
 
@@ -56,7 +56,7 @@ public:
 	friend bool operator==(const Coordinates &qs, const Coordinates &qs_other);
 
 	static Coordinates Zero(CoordinateIDManager ids);
-	int size();
+	int size() const;
 
 	NumericalVectorArray::ColXpr operator[](std::string name);
 

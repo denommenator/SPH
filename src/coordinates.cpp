@@ -17,7 +17,7 @@ CoordinateIDManager::CoordinateIDManager(const std::initializer_list<std::string
 }
 
 
-int CoordinateIDManager::size()
+int CoordinateIDManager::size() const
 {
 	return coordinate_id_map.size();
 }
@@ -66,7 +66,7 @@ bool operator==(const Coordinates &qs, const Coordinates &qs_other)
 	return (qs.coordinate_ids == qs_other.coordinate_ids) && ( qs.coordinate_matrix.isApprox(qs_other.coordinate_matrix) );
 }
 
-int Coordinates::size()
+int Coordinates::size() const
 {
 	return coordinate_ids.size();
 }

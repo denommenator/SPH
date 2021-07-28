@@ -17,17 +17,14 @@ SCENARIO("We can initialize and evaluate a scalar field using SPH interpolation"
 
 
 	ScalarField F(qs);
-	ScalarFieldVectorized G(qs);
 
 	F["01"] << 100;
 	F["02"] << 200;
 
-	G["01"] << 100;
-	G["02"] << 200;
 
 	//F({1,2})
 	Coordinate r{1,2};
 	CAPTURE(F.weights, F(r));
-	REQUIRE(F(r) == Approx(G(r)));
+	REQUIRE_FALSE(F(r) == Approx(0));
 
 }

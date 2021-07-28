@@ -5,15 +5,12 @@
 
 namespace SPH
 {
-ScalarField::ScalarField(Coordinates qs, Kernels::SmoothingKernel W)
+
+ScalarField::ScalarField(Coordinates qs)
 :	qs{qs},
-	weights{qs.size()},
-	W{W}
+	weights{qs.size()}
 {}
 
-ScalarFieldVectorized::ScalarFieldVectorized(Coordinates qs, Kernels::SmoothingKernelVectorized W_vectorized)
-:ScalarField{qs, W_vectorized}, W_vectorized{W_vectorized}
-{}
 
 
 
@@ -24,7 +21,7 @@ NumericalScalarArray::ColXpr ScalarField::operator[](std::string name)
 }
 
 
-num_t ScalarFieldVectorized::operator()(Coordinate r)
+num_t ScalarField::operator()(Coordinate r)
 {
 	
 	//NumericalVectorArray &coord_matrix = qs.coordinate_matrix;
@@ -32,11 +29,11 @@ num_t ScalarFieldVectorized::operator()(Coordinate r)
 	NumericalScalarArray &densities = qs.coordinate_ids.coordinate_densities;
 
 	
-	return (weights * masses / densities * W_vectorized(qs, r, 1)).sum();
+	return (weights * masses / densities * W(qs, r, 1)).sum();
 	
 }	
 
-num_t ScalarField::operator()(Coordinate r)
+num_t ScalarField::non_vectorized(Coordinate r)
 {
 	num_t F_r{0};
 	NumericalVectorArray &coord_matrix = qs.coordinate_matrix;
@@ -54,18 +51,12 @@ num_t ScalarField::operator()(Coordinate r)
 	return F_r;
 }	
 
-DensityField::DensityField(Coordinates qs, Kernels::SmoothingKernel W)
-:ScalarField{qs, W}
-{
-	weights = qs.coordinate_ids.coordinate_densities;
-}
 
-DensityFieldVectorized::DensityFieldVectorized(Coordinates qs, Kernels::SmoothingKernelVectorized W_vectorized)
-:ScalarFieldVectorized{qs, W_vectorized}
+DensityField::DensityField(Coordinates qs)
+:ScalarField{qs}
 {
-	weights = qs.coordinate_ids.coordinate_densities;
+	(*this).weights = qs.coordinate_ids.coordinate_densities;
 }
-
 
 
 
