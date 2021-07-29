@@ -23,12 +23,12 @@ int CoordinateIDManager::size() const
 }
 
 
-int CoordinateIDManager::operator[](std::string name)
+int CoordinateIDManager::operator[](std::string name) const
 {
-	return coordinate_id_map[name];
+	return coordinate_id_map.at(name);
 }
 
-std::string CoordinateIDManager::operator[](int id)
+std::string CoordinateIDManager::operator[](int id)const 
 {
 	return coordinate_names[id];
 }

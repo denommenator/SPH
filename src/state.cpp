@@ -14,7 +14,12 @@ State::State(Coordinates qs,
 	: qs{qs}, q_dots{q_dots}
 	{}
 
-
+std::ostream& operator<<(std::ostream &strm, const State &s)
+{
+	strm << "qs: " << s.qs << std::endl;
+	strm << "q_dots" << s.qs << std::endl;
+	return strm;
+}
 	
 
 } //namespace SPH

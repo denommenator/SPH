@@ -1,15 +1,17 @@
 #pragma once
 
-#include <Eigen/Dense>
-#include <Eigen/src/Core/util/Constants.h>
-
-
 #include <string>
 #include <ostream>
 #include <vector>
 #include <set>
 #include <map>
 #include <initializer_list>
+
+#include <Eigen/Dense>
+#include <Eigen/src/Core/util/Constants.h>
+
+
+
 
 
 namespace SPH
@@ -18,8 +20,12 @@ namespace SPH
 const int DIMENSION = 2;
 using num_t = double;
 using Coordinate = Eigen::Array<num_t, DIMENSION, 1>;
+using NumericalVector = Eigen::Array<num_t, DIMENSION, 1>;
 using NumericalVectorArray = Eigen::Array<num_t, DIMENSION, Eigen::Dynamic>;
 using NumericalScalarArray  = Eigen::Array<num_t, 1, Eigen::Dynamic>;
+
+
+
 
 
 
@@ -31,8 +37,8 @@ public:
 
 
 	int size() const;
-	int operator[](std::string name);
-	std::string operator[](int id);
+	int operator[](std::string name) const;
+	std::string operator[](int id) const;
 
 	friend bool operator==(const CoordinateIDManager &ids, const CoordinateIDManager &other_ids);
 

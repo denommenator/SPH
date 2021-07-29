@@ -29,7 +29,7 @@ num_t ScalarField::operator()(Coordinate r)
 	NumericalScalarArray &densities = qs.coordinate_ids.coordinate_densities;
 
 	
-	return (weights * masses / densities * W(qs, r, 1)).sum();
+	return (weights * masses / densities * W(qs, r, 1)).array().sum();
 	
 }	
 

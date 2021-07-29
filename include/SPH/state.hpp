@@ -34,6 +34,8 @@ public:
 
 };
 
+std::ostream& operator<<(std::ostream &strm, const State &s);
+
 
 
 
