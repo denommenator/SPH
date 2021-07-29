@@ -50,11 +50,11 @@ State Container::collision_resolver(const State &s) const
 		
 		CollisionList_t collided = wall.detect_collisions(s_resolved.qs);
 		const CoordinateIDManager &coordinate_ids = s_resolved.qs.coordinate_ids;
-		for(auto coordinate_name : coordinate_ids.coordinate_names)
+		for(int id=0; id<coordinate_ids.size(); id++)
 		{
-			if (collided(coordinate_ids[coordinate_name]))
+			if (collided(id))
 			{
-				s_resolved.q_dots[coordinate_name] = wall.reflect_velocity(s_resolved.q_dots[coordinate_name]);
+				s_resolved.q_dots[id] = wall.reflect_velocity(s_resolved.q_dots[id]);
 			}
 		}
 	}

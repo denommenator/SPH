@@ -65,6 +65,7 @@ public:
 	int size() const;
 
 	NumericalVectorArray::ColXpr operator[](std::string name);
+	NumericalVectorArray::ColXpr operator[](int id);
 
 	
 	CoordinateIDManager coordinate_ids;

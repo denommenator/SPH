@@ -60,6 +60,11 @@ NumericalVectorArray::ColXpr Coordinates::operator[](std::string name)
 	return coordinate_matrix.col(index);
 }
 
+NumericalVectorArray::ColXpr Coordinates::operator[](int id)
+{
+	return coordinate_matrix.col(id);
+}
+
 
 bool operator==(const Coordinates &qs, const Coordinates &qs_other)
 {
