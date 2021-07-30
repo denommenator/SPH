@@ -19,6 +19,8 @@ public:
 	State(Coordinates qs, 
 		Coordinates q_dots);
 
+	State(CoordinateIDManager coordinate_ids);
+
 	template<typename EOS_t = ColeEOS>
 	Coordinates get_acceleration(const EOS_t &p = ColeEOS()) const;
 
@@ -26,6 +28,7 @@ public:
 	//State next_state(num_t dt, NextStateFunction_t next_state_function, EOS_t p = ColeEOS());
 	
 
+	CoordinateIDManager coordinate_ids;
 	Coordinates qs;
 	Coordinates q_dots;
 	Kernels::SmoothingKernel W{};
