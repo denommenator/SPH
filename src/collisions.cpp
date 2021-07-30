@@ -17,13 +17,27 @@ void ContainerWall::finish_setup()
 	n_norm_squared = inward_normal.squaredNorm();
 }
 
-CollisionList_t ContainerWall::detect_collisions(const Coordinates &qs) const
+CollisionList_t ContainerWall::outside_wall(const State &s) const
 {
-	
+	const Coordinates &qs = s.qs;
 	const NumericalVectorArray_m &qs_mat = qs.coordinate_matrix.matrix();
 	const NumericalScalarArray n_dot_p_array = NumericalScalarArray::Constant(qs.size(), n_dot_p);
 	return (  inward_normal.transpose() * qs_mat  ).array() 
 								< n_dot_p_array;
+}
+
+CollisionList_t ContainerWall::moving_away(const State &s) const
+{
+	const Coordinates &q_dots = s.q_dots;
+	const NumericalVectorArray_m &q_dots_mat = q_dots.coordinate_matrix.matrix();
+	return ( inward_normal.transpose() * q_dots_mat ).array() < 0;
+
+}
+
+
+CollisionList_t ContainerWall::detect_collisions(const State &s) const
+{
+	return moving_away(s) && outside_wall(s);
 }
 
 Coordinate ContainerWall::reflect_velocity(const Coordinate &q_dot) const
@@ -48,7 +62,7 @@ State Container::collision_resolver(const State &s) const
 	for(auto&& wall : walls)
 	{
 		
-		CollisionList_t collided = wall.detect_collisions(s_resolved.qs);
+		CollisionList_t collided = wall.detect_collisions(s_resolved);
 		const CoordinateIDManager &coordinate_ids = s_resolved.qs.coordinate_ids;
 		for(int id=0; id<coordinate_ids.size(); id++)
 		{

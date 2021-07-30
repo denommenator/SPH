@@ -21,7 +21,7 @@ class ContainerWall
 {
 public:
 
-	CollisionList_t detect_collisions(const Coordinates &qs) const;
+	CollisionList_t detect_collisions(const State &s) const;
 	
 	Coordinate reflect_velocity(const Coordinate &q_dot) const;
 
@@ -30,6 +30,9 @@ public:
 
 	void finish_setup();
 private:
+	CollisionList_t outside_wall(const State &s) const;
+	CollisionList_t moving_away(const State &s) const;
+
 	num_t n_dot_p;
 	num_t n_norm_squared;
 };

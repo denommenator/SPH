@@ -13,14 +13,18 @@ using namespace SPH;
 SCENARIO("We can construct a collision wall object", "[collisions]")
 {
 	
-	CoordinateIDManager ids = {"non-collision", "collision"};
-	//std::set<std::string> names = {"01", "02"};
-	Coordinates qs(ids), q_dots(ids);
-	qs["non-collision"] << .5,.5;
-	qs["collision"] << .5,-0.1;
+	CoordinateIDManager ids = {"inside_wall", 
+								"outside_wall_moving_in",
+								 "outside_wall_moving_away"	};
 
-	q_dots["non-collision"] << 1,1;
-	q_dots["collision"] << 1,-0.1;
+	Coordinates qs(ids), q_dots(ids);
+	qs["inside_wall"] << .5,.5;
+	qs["outside_wall_moving_in"] << .5,-0.1;
+	qs["outside_wall_moving_away"] << .7,-0.2;
+
+	q_dots["inside_wall"] << 1,1;
+	q_dots["outside_wall_moving_in"] << 1,0.1;
+	q_dots["outside_wall_moving_away"] << 1,-0.1;
 
 	State one_collision(qs, q_dots);
 
@@ -56,24 +60,29 @@ SCENARIO("We can construct a collision wall object", "[collisions]")
 	THEN("one collision should be detected")
 	{
 
-		Collisions::CollisionList_t collision = box.walls[0].detect_collisions(one_collision.qs);
+		Collisions::CollisionList_t collision = box.walls[0].detect_collisions(one_collision);
 		CAPTURE(collision);
-		REQUIRE_FALSE(collision(qs.coordinate_ids["non-collision"]));
-		REQUIRE(collision(qs.coordinate_ids["collision"]));
+		REQUIRE_FALSE(collision(qs.coordinate_ids["inside_wall"]));
+		REQUIRE_FALSE(collision(qs.coordinate_ids["outside_wall_moving_in"]));
+		REQUIRE(collision(qs.coordinate_ids["outside_wall_moving_away"]));
 
 	}
 
-	THEN("the non-collided particle is unchanged")
+	THEN("the non-collided particles are unchanged")
 	{
-		REQUIRE(one_collision_resolved.qs["non-collision"].isApprox(one_collision_resolved.qs["non-collision"]));
-		REQUIRE(one_collision_resolved.q_dots["non-collision"].isApprox(one_collision_resolved.q_dots["non-collision"]));
+		REQUIRE(one_collision_resolved.qs["inside_wall"].isApprox(one_collision_resolved.qs["inside_wall"]));
+		REQUIRE(one_collision_resolved.q_dots["inside_wall"].isApprox(one_collision_resolved.q_dots["inside_wall"]));
+
+		REQUIRE(one_collision_resolved.qs["outside_wall_moving_in"].isApprox(one_collision_resolved.qs["outside_wall_moving_in"]));
+		REQUIRE(one_collision_resolved.q_dots["outside_wall_moving_in"].isApprox(one_collision_resolved.q_dots["outside_wall_moving_in"]));
+
 	}
 	AND_THEN("the collided particle has its velocity reflected")
 	{
-		REQUIRE(one_collision_resolved.qs["collision"].isApprox(one_collision_resolved.qs["collision"]));
+		REQUIRE(one_collision_resolved.qs["outside_wall_moving_away"].isApprox(one_collision_resolved.qs["outside_wall_moving_away"]));
 
-		REQUIRE(one_collision_resolved.q_dots["collision"](0) == Approx(one_collision.q_dots["collision"](0)));
-		REQUIRE(one_collision_resolved.q_dots["collision"](1) == Approx(-one_collision.q_dots["collision"](1)));
+		REQUIRE(one_collision_resolved.q_dots["outside_wall_moving_away"](0) == Approx(one_collision.q_dots["outside_wall_moving_away"](0)));
+		REQUIRE(one_collision_resolved.q_dots["outside_wall_moving_away"](1) == Approx(-one_collision.q_dots["outside_wall_moving_away"](1)));
 	}
 
 };
