@@ -20,7 +20,7 @@ SCENARIO("We can construct a collision wall object", "[collisions]")
 	Coordinates qs(ids), q_dots(ids);
 	qs["inside_wall"] << .5,.5;
 	qs["outside_wall_moving_in"] << .5,-0.1;
-	qs["outside_wall_moving_away"] << .7,-0.2;
+	qs["outside_wall_moving_away"] << .7,-1;
 
 	q_dots["inside_wall"] << 1,1;
 	q_dots["outside_wall_moving_in"] << 1,0.1;
@@ -29,7 +29,6 @@ SCENARIO("We can construct a collision wall object", "[collisions]")
 	State one_collision(qs, q_dots);
 
 	
-	//normal vector, and point it goes through
 
 	Collisions::ContainerWall wall_lower{};
 
@@ -37,23 +36,7 @@ SCENARIO("We can construct a collision wall object", "[collisions]")
 	wall_lower.point << 0,0;
 	
 
-	// NumericalVector normal_vector_upper = {0,-1};
-	// Coordinate point_upper = {0,1};
-	// Collisions::ContainerWall wall_upper(normal_vector_upper, point_upper);
-
-	// NumericalVector normal_vector_left = {1,0};
-	// Coordinate point_left = {0,0};
-	// Collisions::ContainerWall wall_left(normal_vector_left, point_left);
-
-	// NumericalVector normal_vector_right = {-1,0};
-	// Coordinate point_right = {1,0};
-	// Collisions::ContainerWall wall_right(normal_vector_right, point_right);
-
-
 	Collisions::Container box({wall_lower});
-								//wall_upper, 
-								//wall_left, 
-								//wall_right});
 
 	State one_collision_resolved = box.collision_resolver(one_collision);
 
@@ -79,7 +62,7 @@ SCENARIO("We can construct a collision wall object", "[collisions]")
 	}
 	AND_THEN("the collided particle has its velocity reflected")
 	{
-		REQUIRE(one_collision_resolved.qs["outside_wall_moving_away"].isApprox(one_collision_resolved.qs["outside_wall_moving_away"]));
+		REQUIRE(one_collision_resolved.qs["outside_wall_moving_away"].isApprox(Coordinate(.7, Collisions::epsilon)));
 
 		REQUIRE(one_collision_resolved.q_dots["outside_wall_moving_away"](0) == Approx(one_collision.q_dots["outside_wall_moving_away"](0)));
 		REQUIRE(one_collision_resolved.q_dots["outside_wall_moving_away"](1) == Approx(-one_collision.q_dots["outside_wall_moving_away"](1)));

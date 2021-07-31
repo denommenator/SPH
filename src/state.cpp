@@ -22,7 +22,7 @@ State::State(CoordinateIDManager coordinate_ids)
 std::ostream& operator<<(std::ostream &strm, const State &s)
 {
 	strm << "qs: " << s.qs << std::endl;
-	strm << "q_dots" << s.qs << std::endl;
+	strm << "q_dots" << s.q_dots << std::endl;
 	return strm;
 }
 	

@@ -1,4 +1,4 @@
-#include <iostream>
+//#include <iostream>
 
 
 #include "SPH/coordinates.hpp"
@@ -47,6 +47,13 @@ Coordinate ContainerWall::reflect_velocity(const Coordinate &q_dot) const
 	
 }
 
+Coordinate ContainerWall::reset_position(const Coordinate &q) const
+{
+	num_t q_dot_n = (q.matrix() - point).dot(inward_normal);
+	return q - (1 + epsilon) * q_dot_n / n_norm_squared * inward_normal.array();
+	
+}
+
 Container::Container(const std::vector<ContainerWall> &container_walls)
 :walls{container_walls}
 {
@@ -59,22 +66,48 @@ Container::Container(const std::vector<ContainerWall> &container_walls)
 State Container::collision_resolver(const State &s) const
 {
 	State s_resolved(s);
+	const CoordinateIDManager &coordinate_ids = s_resolved.qs.coordinate_ids;
+
 	for(auto&& wall : walls)
 	{
 		
 		CollisionList_t collided = wall.detect_collisions(s_resolved);
-		const CoordinateIDManager &coordinate_ids = s_resolved.qs.coordinate_ids;
+		
 		for(int id=0; id<coordinate_ids.size(); id++)
 		{
 			if (collided(id))
 			{
+
 				s_resolved.q_dots[id] = wall.reflect_velocity(s_resolved.q_dots[id]);
+				s_resolved.qs[id] = wall.reset_position(s_resolved.qs[id]);
 			}
 		}
 	}
 
 	return s_resolved;
 
+}
+
+Container BoxContainer(const Coordinate lower_left, const Coordinate upper_right)
+{
+	Collisions::ContainerWall wall_lower{},
+							  wall_upper{},
+							  wall_left{},
+							  wall_right{};
+
+	wall_lower.inward_normal << 0, 1;
+	wall_lower.point = lower_left;
+
+	wall_upper.inward_normal << 0, -1;
+	wall_upper.point = upper_right;
+
+	wall_left.inward_normal << 1, 0;
+	wall_left.point = lower_left;
+
+	wall_right.inward_normal << -1, 0;
+	wall_right.point = upper_right;
+
+	return Container({wall_lower, wall_upper, wall_left, wall_right});
 }
 
 } //namespace Collisions

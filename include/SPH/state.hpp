@@ -22,7 +22,7 @@ public:
 	State(CoordinateIDManager coordinate_ids);
 
 	template<typename EOS_t = ColeEOS>
-	Coordinates get_acceleration(const EOS_t &p = ColeEOS()) const;
+	Coordinates get_acceleration(const EOS_t &p = ColeEOS(), const num_t g = 9.8) const;
 
 	//template<typename EOS_t = ColeEOS, typename NextStateFunction_t>
 	//State next_state(num_t dt, NextStateFunction_t next_state_function, EOS_t p = ColeEOS());
@@ -43,7 +43,7 @@ std::ostream& operator<<(std::ostream &strm, const State &s);
 
 
 template<typename EOS_t>
-Coordinates State::get_acceleration(const EOS_t &p) const
+Coordinates State::get_acceleration(const EOS_t &p, const num_t g) const
 {
 	
 
@@ -75,14 +75,19 @@ Coordinates State::get_acceleration(const EOS_t &p) const
 	{
 		for(int p_id = 0; p_id < N; p_id++)
 		{
+			//accel due to fluid mechanics
 			accel.col(q_id) += 
 							-masses[p_id] * (
 								pressure_samples(q_id)/pow(density_samples(q_id),2)
 								+pressure_samples(p_id)/pow(density_samples(q_id), 2)
 								) * W.gradient_q(qs_matrix.col(q_id), qs_matrix.col(p_id), 1);
+			//accel due to gravity
+			accel.col(q_id) += -g * Coordinate(0,-1);
 				
 		}
 	}
+
+
 
 	return qs_dot_dot;
 

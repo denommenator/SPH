@@ -1,8 +1,5 @@
-#include <string>
-#include <vector>
 
 
-#include <Eigen/Dense>
 #include <catch2/catch.hpp>
 
 #include <SPH/coordinates.hpp>
