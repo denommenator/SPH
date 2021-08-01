@@ -3,9 +3,9 @@
 #include <string>
 #include <ostream>
 #include <vector>
+#include <initializer_list>
 #include <set>
 #include <map>
-#include <initializer_list>
 
 #include <Eigen/Dense>
 #include <Eigen/src/Core/util/Constants.h>
@@ -34,6 +34,8 @@ class CoordinateIDManager
 {
 public:
 	CoordinateIDManager(const std::initializer_list<std::string> &names);
+
+	CoordinateIDManager(const std::vector<std::string> &names);
 
 
 	int size() const;

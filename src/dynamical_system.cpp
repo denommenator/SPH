@@ -1,4 +1,9 @@
+
+#include <indicators/block_progress_bar.hpp>
+#include <indicators/cursor_control.hpp>
+
 #include "SPH/integrators.hpp"
+
 #include <SPH/dynamical_system.hpp>
 
 namespace SPH
@@ -13,10 +18,35 @@ DynamicalSystem::DynamicalSystem(const State &initial_state, const Collisions::C
 
 TrajectoryData DynamicalSystem::run_dynamics(int num_steps, num_t dt)
 {
+	using namespace indicators;
+	show_console_cursor(false);
+
+	 BlockProgressBar bar{
+	    option::BarWidth{50},
+	    option::Start{"["},
+	    //option::Remainder{"-"},
+	    option::End{"]"},
+	    option::ShowElapsedTime{true},
+    	option::ShowRemainingTime{true},
+	    option::ForegroundColor{Color::green},
+	    option::FontStyles{std::vector<FontStyle>{FontStyle::bold}},
+	    option::MaxProgress{num_steps}
+	  };
+
+
 	for(int n=0; n<num_steps; n++)
 	{
 		step_dynamics(dt);
+
+		bar.set_option(indicators::option::PostfixText{"Dynamics iteration: " 
+													+ std::to_string(n) + "/" 
+													+ std::to_string(num_steps)}
+													);
+		bar.tick();
+
 	}
+
+	show_console_cursor(true);
 
 	return trajectory_data;
 }

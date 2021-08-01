@@ -13,6 +13,8 @@ add_library(SPH_library ${SOURCE_LIST} ${HEADER_LIST})
 
 target_link_libraries (SPH_library PUBLIC Eigen3::Eigen)
 
+target_link_libraries (SPH_library PRIVATE indicators::indicators)
+
 # We need this directory, and users of our library will need it too
 target_include_directories(SPH_library PUBLIC ${SPH_SOURCE_DIR}/include)
 
