@@ -73,14 +73,16 @@ Coordinates State::get_acceleration(const EOS_t &p, const num_t g) const
 
 	for(int q_id = 0; q_id < N; q_id++)
 	{
-		for(int p_id = 0; p_id < N; p_id++)
+		for(int p_id = q_id + 1; p_id < N; p_id++)
 		{
 			//accel due to fluid mechanics
-			accel.col(q_id) += 
-							-masses[p_id] * (
+			 
+			Coordinate accel_q_p = -masses[p_id] * (
 								pressure_samples(q_id)/pow(density_samples(q_id),2)
 								+pressure_samples(p_id)/pow(density_samples(q_id), 2)
 								) * W.gradient_q(qs_matrix.col(q_id), qs_matrix.col(p_id), 1);
+			accel.col(q_id) += accel_q_p;
+			accel.col(p_id) -= accel_q_p;
 			//accel due to gravity
 			accel.col(q_id) += -g * Coordinate(0,-1);
 				

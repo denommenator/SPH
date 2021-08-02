@@ -24,7 +24,6 @@ TrajectoryData DynamicalSystem::run_dynamics(int num_steps, num_t dt)
 	 BlockProgressBar bar{
 	    option::BarWidth{50},
 	    option::Start{"["},
-	    //option::Remainder{"-"},
 	    option::End{"]"},
 	    option::ShowElapsedTime{true},
     	option::ShowRemainingTime{true},
@@ -47,7 +46,7 @@ TrajectoryData DynamicalSystem::run_dynamics(int num_steps, num_t dt)
 	}
 
 	show_console_cursor(true);
-
+	bar.mark_as_completed();
 	return trajectory_data;
 }
 

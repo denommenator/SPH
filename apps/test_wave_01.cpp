@@ -24,7 +24,7 @@ int main()
 	num_t fluid_depth = 10;
 
 	num_t dt = 1./20;
-	num_t time = 10;
+	num_t time = 1;
 
 
 	//setup container box
