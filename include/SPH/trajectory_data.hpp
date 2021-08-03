@@ -20,6 +20,7 @@ public:
 	TrajectoryData operator<<(const State &s);
 
 	State& current_state();
+	void to_csv(std::string filename);
 
 	std::vector<State> states{};
 	Collisions::Container container;

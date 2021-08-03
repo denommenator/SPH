@@ -1,0 +1,3 @@
+#pragma once
+
+#define EXPORT_DATA_PATH "@EXPORT_DATA_PATH@"

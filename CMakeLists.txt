@@ -29,5 +29,5 @@ FetchContent_MakeAvailable(indicators)
 
 include(CTest)
 add_subdirectory(test)
-
+add_subdirectory(include/SPH)
 add_subdirectory(apps)
