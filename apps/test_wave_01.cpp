@@ -1,3 +1,4 @@
+#include "SPH/trajectory_data.hpp"
 #include <iostream>
 
 
@@ -5,6 +6,7 @@
 #include <SPH/state.hpp>
 #include <SPH/collisions.hpp>
 #include <SPH/dynamical_system.hpp>
+#include <SPH/serializers.hpp>
 
 using namespace SPH;
 
@@ -67,6 +69,8 @@ int main()
 
 	DynamicalSystem dynamical_system(initial_state, box);
 
-	dynamical_system.run_dynamics(time / dt, dt);
+	TrajectoryData td = dynamical_system.run_dynamics(time / dt, dt);
+
+	Serializers::to_csv(td, "test_wave_01.csv");
 
 }

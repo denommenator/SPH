@@ -10,7 +10,7 @@
 namespace SPH
 {
 
-//extern ColeEOS cole_object;
+
 
 class State
 {

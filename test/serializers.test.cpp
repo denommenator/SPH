@@ -32,7 +32,7 @@ SCENARIO("Write a trajectory data item to disk", "[serializers]")
 
 	DynamicalSystem dynamical_system(initial_state, box);
 
-	TrajectoryData td = dynamical_system.run_dynamics(10, .1);
+	TrajectoryData td = dynamical_system.run_dynamics(100, .1);
 
 	Serializers::to_csv(td, "first_test.csv");
 
