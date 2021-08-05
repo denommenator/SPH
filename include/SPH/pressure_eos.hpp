@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-#include <SPH/coordinates.hpp>
+#include "coordinates.hpp"
 
 #include <functional>
 

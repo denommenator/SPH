@@ -4,7 +4,7 @@
 #include <functional>
 
 
-#include "SPH/pressure_eos.hpp"
+#include "pressure_eos.hpp"
 #include "coordinates.hpp"
 #include "kernels.hpp"
 #include "state.hpp"

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <SPH/coordinates.hpp>
-#include <SPH/kernels.hpp>
+#include "coordinates.hpp"
+#include "kernels.hpp"
 
 
 

@@ -2,3 +2,4 @@ build
 .cache
 compile_commands.json
 exportdata
+pythonrenderer/__pycache__
