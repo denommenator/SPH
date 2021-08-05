@@ -30,13 +30,17 @@ class Renderer(object):
         #self.time_text = self.ax.text(0.05, 0.9, '', transform=self.ax.transAxes)
 
         self.ani = animation.FuncAnimation(
-            self.fig, self.update, frames=trajectory_data.shape[2], init_func=self.setup_plot, blit=False)
+            self.fig, self.update, frames=trajectory_data.shape[2], init_func=self.setup_plot, repeat=True, blit=False)
+        plt.show()
 
     def setup_plot(self):
         xs = np.array(self.trajectory_data[0, :, 0])
         ys = np.array(self.trajectory_data[1, :, 0])
         
         self.scat = self.ax.scatter(xs, ys)
+
+
+        self.scat.set_offsets(np.zeros((xs.size, 2)))
         return self.scat,
 
     def update(self, i):
