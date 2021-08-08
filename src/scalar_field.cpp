@@ -6,7 +6,7 @@
 namespace SPH
 {
 
-ScalarField::ScalarField(Coordinates qs)
+ScalarField::ScalarField(const Coordinates &qs)
 :	qs{qs},
 	weights{qs.size()}
 {}

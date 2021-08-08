@@ -7,6 +7,7 @@
 #include "pressure_eos.hpp"
 #include "coordinates.hpp"
 #include "kernels.hpp"
+#include "vector_field.hpp"
 #include "state.hpp"
 
 namespace SPH
@@ -14,38 +15,44 @@ namespace SPH
 namespace Integrators
 {
 
-// class Integrator
-// {
-// public:
-// 	Integrator(NextState_t next_state_function, NextState_t initial_next_state_function);
-
-// 	template<typename EOS_t = ColeEOS, typename NextStateFunction_t>
-// 	State next_state(State s, num_t dt, NextStateFunction_t next_state_function, EOS_t p = ColeEOS());
-	
-// 	template<typename EOS_t = ColeEOS>
-// 	State initial_next_state(State s, num_t dt, EOS_t p = ColeEOS());
-
-// 	NextState_t next_state_function;
-// 	NextState_t initial_next_state_function;
-
-// };
-
 
 template<typename EOS_t = ColeEOS>
-State explicit_euler_next(const State &s, num_t dt, EOS_t p = ColeEOS())
+State explicit_euler_next(const State &s, num_t dt, const Kernels::SmoothingKernel W = Kernels::SmoothingKernel(), const EOS_t p = ColeEOS())
 {
-	Coordinates qs_next{s.qs}, q_dots_next{s.q_dots};
+	const Coordinates& qs{s.qs}, q_dots{s.q_dots};
+	
+	State s_next{s};
+	Coordinates& qs_next{s_next.qs}, q_dots_next{s_next.q_dots};
 
-	Coordinates q_dot_dots{s.get_acceleration(p)};
+	Coordinates q_dot_dots{get_acceleration(qs, W, p)};
 
-	qs_next.coordinate_matrix += dt * s.q_dots.coordinate_matrix;
+	qs_next.coordinate_matrix += dt * q_dots.coordinate_matrix;
 	q_dots_next.coordinate_matrix += dt * q_dot_dots.coordinate_matrix;
 
-	State s_next{qs_next, q_dots_next};
-
 	return s_next;
-
 }
+
+// template<typename EOS_t = ColeEOS>
+// std::tuple<Coordinates, Coordinates> velocity_verlet_next(const Coordinates &qs, const Coordinates &q_dots, num_t dt, EOS_t p = ColeEOS())
+// {
+// 	Coordinates qs_next{qs}, q_dots_next{q_dots};
+
+// 	Coordinates q_dot_dots{Kernels::get_acceleration(qs, p)};
+
+// 	State temp_s_next{qs_next, q_dots_next};
+
+// 	Coordinates q_dot_dots_next{temp_s_next.get_acceleration(p)};
+
+// 	qs_next.coordinate_matrix += dt * q_dots.coordinate_matrix
+// 								+ 0.5 * dt * dt * q_dot_dots.coordinate_matrix;
+// 	q_dots_next.coordinate_matrix += 0.5 * dt * 
+// 							( q_dot_dots.coordinate_matrix + 
+// 								q_dot_dots_next.coordinate_matrix);
+
+// 	return std::make_tuple(qs_next, q_dots_next);
+
+// }
+
 
 }//namespace Integrators
 }//namespace SPH

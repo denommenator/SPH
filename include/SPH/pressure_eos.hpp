@@ -2,10 +2,11 @@
 
 
 #include <cmath>
+#include <functional>
 
 #include "coordinates.hpp"
 
-#include <functional>
+
 
 
 

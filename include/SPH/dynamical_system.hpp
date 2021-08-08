@@ -3,9 +3,9 @@
 
 
 #include "coordinates.hpp"
-#include "state.hpp"
 #include "collisions.hpp"
 #include "trajectory_data.hpp"
+#include "state.hpp"
 
 
 namespace SPH
@@ -21,7 +21,8 @@ public:
 	TrajectoryData step_dynamics(num_t dt);
 
 	TrajectoryData trajectory_data;
-	State initial_state;
+	Coordinates initial_qs;
+	Coordinates initial_q_dots;
 	SPH::Collisions::Container container;
 };
 

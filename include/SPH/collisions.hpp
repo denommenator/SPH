@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <tuple>
 
 #include "coordinates.hpp"
 #include "state.hpp"
@@ -33,8 +34,8 @@ public:
 
 	void finish_setup();
 private:
-	CollisionList_t outside_wall(const State &s) const;
-	CollisionList_t moving_away(const State &s) const;
+	CollisionList_t outside_wall(const Coordinates &qs) const;
+	CollisionList_t moving_away(const Coordinates &q_dots) const;
 
 	num_t n_dot_p;
 	num_t n_norm_squared;

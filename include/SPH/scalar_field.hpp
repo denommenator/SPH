@@ -14,7 +14,7 @@ class ScalarField
 {
 public:
 
-	ScalarField(Coordinates qs);
+	ScalarField(const Coordinates &qs);
 	
 	NumericalScalarArray::ColXpr operator[](std::string name);
 

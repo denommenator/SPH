@@ -50,12 +50,12 @@ CSV& operator<<(CSV &csv, const CoordinateIDManager &ids)
 	return csv;
 }
 
-CSV& operator<<(CSV &csv, const State &s) 
+CSV& operator<<(CSV &csv, const Coordinates &qs) 
 {
 	const static Eigen::IOFormat CSVFormat(Eigen::StreamPrecision, 0, ", ");
 	
-	const Eigen::Matrix<num_t, DIMENSION, Eigen::Dynamic> qs_matrix = s.qs.coordinate_matrix;
-	const Eigen::Map<const Eigen::Matrix<num_t, 1, Eigen::Dynamic>> qs_flattened(qs_matrix.data(), s.qs.coordinate_matrix.size());
+	const Eigen::Matrix<num_t, DIMENSION, Eigen::Dynamic> qs_matrix = qs.coordinate_matrix;
+	const Eigen::Map<const Eigen::Matrix<num_t, 1, Eigen::Dynamic>> qs_flattened(qs_matrix.data(), qs.coordinate_matrix.size());
 	csv.export_csv << qs_flattened.format(CSVFormat);
 	csv << "\n";
 	return csv;
@@ -64,9 +64,9 @@ CSV& operator<<(CSV &csv, const State &s)
 void to_csv(TrajectoryData td, std::string filename)
 {
 	CSV export_csv(filename);
-	export_csv << td.current_state().coordinate_ids;
-	for(auto &state : td.states)
-		export_csv << state;
+	export_csv << td.current_qs().coordinate_ids;
+	for(auto &qs : td.qs_list)
+		export_csv << qs;
 
 
 

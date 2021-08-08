@@ -3,7 +3,6 @@
 
 
 #include "dynamical_system.hpp"
-#include "state.hpp"
 #include "coordinates.hpp"
 #include "trajectory_data.hpp"
 

@@ -6,6 +6,7 @@
 #include <initializer_list>
 #include <set>
 #include <map>
+#include <tuple>
 
 #include <Eigen/Dense>
 #include <Eigen/src/Core/util/Constants.h>
@@ -67,7 +68,9 @@ public:
 	int size() const;
 
 	NumericalVectorArray::ColXpr operator[](std::string name);
+	const NumericalVectorArray::ConstColXpr operator[](std::string name) const;
 	NumericalVectorArray::ColXpr operator[](int id);
+	const NumericalVectorArray::ConstColXpr operator[](int id) const;
 
 	
 	CoordinateIDManager coordinate_ids;

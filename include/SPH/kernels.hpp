@@ -6,7 +6,7 @@
 #include <cmath>
 
 #include "coordinates.hpp"
-
+#include "pressure_eos.hpp"
 
 namespace SPH
 {
@@ -31,6 +31,8 @@ public:
 	decltype(W_gaussian_gradient_q)& gradient_q{W_gaussian_gradient_q};
 
 };
+
+
 
 } //namespace Kernels
 } //namespace SPH

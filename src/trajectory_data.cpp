@@ -10,17 +10,20 @@ TrajectoryData::TrajectoryData(const Collisions::Container &container)
 :container{container}
 {}
 
-TrajectoryData TrajectoryData::operator<<(const State &s)
+
+Coordinates& TrajectoryData::current_qs()
 {
-	states.push_back(s);
-	return (*this);
+	return qs_list.back();
 }
 
-
-State& TrajectoryData::current_state()
+Coordinates& TrajectoryData::current_q_dots()
 {
-	return states.back();
+	return q_dots_list.back();
 }
 
+Coordinates& TrajectoryData::current_q_dot_dots()
+{
+	return q_dot_dots_list.back();
+}
 
 } //namespace SPH

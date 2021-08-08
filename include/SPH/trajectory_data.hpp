@@ -4,7 +4,6 @@
 
 
 #include "coordinates.hpp"
-#include "state.hpp"
 #include "collisions.hpp"
 #include "trajectory_data.hpp"
 
@@ -17,12 +16,17 @@ class TrajectoryData
 public:
 
 	TrajectoryData(const Collisions::Container &container);
-	TrajectoryData operator<<(const State &s);
 
-	State& current_state();
+	Coordinates& current_qs();
+	Coordinates& current_q_dots();
+	Coordinates& current_q_dot_dots();
+
+
 	void to_csv(std::string filename);
 
-	std::vector<State> states{};
+	std::vector<Coordinates> qs_list{};
+	std::vector<Coordinates> q_dots_list{};
+	std::vector<Coordinates> q_dot_dots_list{};
 	Collisions::Container container;
 
 };

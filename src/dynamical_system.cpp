@@ -2,17 +2,19 @@
 #include <indicators/block_progress_bar.hpp>
 #include <indicators/cursor_control.hpp>
 
-#include "SPH/integrators.hpp"
-
+#include <SPH/integrators.hpp>
+#include <SPH/vector_field.hpp>
 #include <SPH/dynamical_system.hpp>
 
 namespace SPH
 {
 
 DynamicalSystem::DynamicalSystem(const State &initial_state, const Collisions::Container &container)
-:initial_state{initial_state}, container{container}, trajectory_data{container}
+:initial_qs{initial_state.qs}, initial_q_dots{initial_state.q_dots}, container{container}, trajectory_data{container}
 {
-	trajectory_data << initial_state;
+	trajectory_data.qs_list.push_back(initial_qs);
+	trajectory_data.q_dots_list.push_back(initial_q_dots);
+	trajectory_data.q_dot_dots_list.push_back(get_acceleration(initial_qs));
 }
 
 
@@ -53,11 +55,20 @@ TrajectoryData DynamicalSystem::run_dynamics(int num_steps, num_t dt)
 
 TrajectoryData DynamicalSystem::step_dynamics(num_t dt)
 {
-	State &s_current = trajectory_data.current_state();
+	Coordinates &qs_current = trajectory_data.qs_list.back();
+	Coordinates &q_dots_current = trajectory_data.q_dots_list.back();
+	//Coordinates &q_dot_dots_current = trajectory_data.q_dot_dots_list.back();
+
+	State s_current{qs_current, q_dots_current};
 
 	State s_next = Integrators::explicit_euler_next(s_current, dt);
+	
+
 	State s_next_resolved = container.collision_resolver(s_next);
-	trajectory_data << s_next_resolved;
+	
+	trajectory_data.qs_list.push_back(s_next_resolved.qs);
+	trajectory_data.q_dots_list.push_back(s_next_resolved.q_dots);
+
 	return trajectory_data;
 }
 

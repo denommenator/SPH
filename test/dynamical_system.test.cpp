@@ -2,9 +2,9 @@
 #include <catch2/catch.hpp>
 
 #include <SPH/coordinates.hpp>
-#include <SPH/state.hpp>
 #include <SPH/collisions.hpp>
 #include <SPH/dynamical_system.hpp>
+#include <SPH/state.hpp>
 
 
 using namespace SPH;
@@ -34,6 +34,7 @@ SCENARIO("Initialize a dynamical system", "[dynamicalsystem]")
 
 	dynamical_system.run_dynamics(100, .1);
 
-	CAPTURE(dynamical_system.trajectory_data.states.back());
-	REQUIRE(false);
+	CAPTURE(dynamical_system.trajectory_data.qs_list.back());
+	CAPTURE(dynamical_system.trajectory_data.q_dots_list.back());
+	
 }
