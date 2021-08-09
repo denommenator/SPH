@@ -21,27 +21,47 @@ import pythonrenderer.csv_reader as csv_reader
 class Renderer(object):
     def __init__(self, trajectory_data):
         self.trajectory_data = trajectory_data
-        self.fig = plt.figure(figsize=(10, 10))
+        self.fig = plt.figure(figsize=(7, 7))
         self.ax = self.fig.add_subplot(
-            111, autoscale_on=False, xlim=(-40, 40), ylim=(0, 20))
+            111, autoscale_on=False, xlim=(-11, 11), ylim=(-1, 21))
         self.ax.set_aspect('equal')
-        #self.ax.grid()
+
         #self.time_template = 'time = %.1fs'
         #self.time_text = self.ax.text(0.05, 0.9, '', transform=self.ax.transAxes)
 
+        self.setup_plot()
+
         self.ani = animation.FuncAnimation(
-            self.fig, self.update, frames=trajectory_data.shape[2], init_func=self.setup_plot, repeat=True, blit=False)
+                                    self.fig, 
+                                    self.update, 
+                                    frames=trajectory_data.shape[2], 
+                                    repeat=True, 
+                                    blit=False)
         plt.show()
 
     def setup_plot(self):
-        xs = np.array(self.trajectory_data[0, :, 0])
-        ys = np.array(self.trajectory_data[1, :, 0])
+        xs = [] #np.array(self.trajectory_data[0, :, 0])
+        ys = [] #np.array(self.trajectory_data[1, :, 0])
         
         self.scat = self.ax.scatter(xs, ys)
 
+        
+        # Major ticks every 20, minor ticks every 5
+        major_x_ticks = np.linspace(-10, 10, 4+1)
+        minor_x_ticks = np.linspace(-10, 10, 20+1)
 
-        self.scat.set_offsets(np.zeros((xs.size, 2)))
-        return self.scat,
+        major_y_ticks = np.linspace(0, 20, 4+1)
+        minor_y_ticks = np.linspace(0, 20, 20+1)
+
+        self.ax.set_xticks(major_x_ticks)
+        self.ax.set_xticks(minor_x_ticks, minor=True)
+        self.ax.set_yticks(major_y_ticks)
+        self.ax.set_yticks(minor_y_ticks, minor=True)
+
+        self.ax.grid(which='both')
+
+        self.ax.grid(which='minor', alpha=0.2)
+        self.ax.grid(which='major', alpha=0.5)
 
     def update(self, i):
         frame_i = np.array(self.trajectory_data[:, :, i])
