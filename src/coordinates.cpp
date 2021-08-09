@@ -9,7 +9,7 @@ CoordinateIDManager::CoordinateIDManager(const std::initializer_list<std::string
 {}
 
 CoordinateIDManager::CoordinateIDManager(const std::vector<std::string> &names)
-:coordinate_names{names}, coordinate_masses(NumericalScalarArray::Constant(names.size(), 1)), coordinate_densities(NumericalScalarArray::Constant(names.size(), 1))
+:coordinate_names{names}, coordinate_masses(NumericalScalarArray::Constant(names.size(), 1000)), coordinate_densities(NumericalScalarArray::Constant(names.size(), 1000))
 {
 	int i=0;
 	for (auto name : names)

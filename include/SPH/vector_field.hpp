@@ -45,14 +45,15 @@ Coordinates get_acceleration(const Coordinates &qs, const Kernels::SmoothingKern
 			 
 			Coordinate accel_q_p = -masses[p_id] * (
 								pressure_samples(q_id)/pow(density_samples(q_id),2)
-								+pressure_samples(p_id)/pow(density_samples(q_id), 2)
+								+pressure_samples(p_id)/pow(density_samples(p_id), 2)
 								) * W.gradient_q(qs_matrix.col(q_id), qs_matrix.col(p_id), 1);
 			accel.col(q_id) += accel_q_p;
 			accel.col(p_id) -= accel_q_p;
-			//accel due to gravity
-			accel.col(q_id) += -g * Coordinate(0,-1);
+			
 				
 		}
+		//accel due to gravity
+		accel.col(q_id) += -g * Coordinate(0,1);
 	}
 
 

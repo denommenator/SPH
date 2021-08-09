@@ -45,29 +45,34 @@ SCENARIO("We can construct a collision wall object", "[collisions]")
 	THEN("one collision should be detected")
 	{
 
-		Collisions::CollisionList_t collision = box.walls[0].detect_collisions(s);
-		CAPTURE(collision);
-		REQUIRE_FALSE(collision(s.coordinate_ids["inside_wall"]));
-		REQUIRE_FALSE(collision(s.coordinate_ids["outside_wall_moving_in"]));
-		REQUIRE(collision(s.coordinate_ids["outside_wall_moving_away"]));
+		Collisions::CollisionList_t outside_wall_list = box.walls[0].outside_wall(s.qs);
+		Collisions::CollisionList_t moving_away_list = box.walls[0].outside_wall(s.q_dots);
+
+		REQUIRE_FALSE(outside_wall_list(s.coordinate_ids["inside_wall"]));
+		REQUIRE(outside_wall_list(s.coordinate_ids["outside_wall_moving_in"]));
+		REQUIRE(outside_wall_list(s.coordinate_ids["outside_wall_moving_away"]));
 
 	}
 
-	THEN("the non-collided particles are unchanged")
+	THEN("the outside wall particles are moved")
 	{
+		CAPTURE(s_resolved.qs);
+
 		REQUIRE(s_resolved.qs["inside_wall"].isApprox(s.qs["inside_wall"]));
+
+		REQUIRE(s_resolved.qs["outside_wall_moving_in"].isApprox(Coordinate(.5, 0)));
+		REQUIRE(s_resolved.qs["outside_wall_moving_away"].isApprox(Coordinate(.7, 0)));
+
+	}
+	AND_THEN("the outside wall particles moving away have their velocity reflected")
+	{
+		CAPTURE(s_resolved.q_dots);
+
 		REQUIRE(s_resolved.q_dots["inside_wall"].isApprox(s.q_dots["inside_wall"]));
 
-		REQUIRE(s_resolved.qs["outside_wall_moving_in"].isApprox(s.qs["outside_wall_moving_in"]));
 		REQUIRE(s_resolved.q_dots["outside_wall_moving_in"].isApprox(s.q_dots["outside_wall_moving_in"]));
 
-	}
-	AND_THEN("the collided particle has its velocity reflected")
-	{
-		REQUIRE(s_resolved.qs["outside_wall_moving_away"].isApprox(Coordinate(.7, Collisions::epsilon)));
-
-		REQUIRE(s_resolved.q_dots["outside_wall_moving_away"](0) == Approx(s.q_dots["outside_wall_moving_away"](0)));
-		REQUIRE(s_resolved.q_dots["outside_wall_moving_away"](1) == Approx(-s.q_dots["outside_wall_moving_away"](1)));
+		REQUIRE(s_resolved.q_dots["outside_wall_moving_away"].isApprox(Coordinate(1, .1)));
 	}
 
 };

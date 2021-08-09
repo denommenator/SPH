@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include <tuple>
 
 #include "coordinates.hpp"
 #include "collisions.hpp"
@@ -19,6 +19,7 @@ public:
 
 	TrajectoryData run_dynamics(int num_steps, num_t dt);
 	TrajectoryData step_dynamics(num_t dt);
+	TrajectoryData step_dynamics_euler(num_t dt);
 
 	TrajectoryData trajectory_data;
 	Coordinates initial_qs;

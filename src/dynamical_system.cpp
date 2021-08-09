@@ -1,3 +1,6 @@
+#include <tuple>
+
+
 
 #include <indicators/block_progress_bar.hpp>
 #include <indicators/cursor_control.hpp>
@@ -34,7 +37,6 @@ TrajectoryData DynamicalSystem::run_dynamics(int num_steps, num_t dt)
 	    option::MaxProgress{num_steps}
 	  };
 
-
 	for(int n=0; n<num_steps; n++)
 	{
 		step_dynamics(dt);
@@ -57,17 +59,41 @@ TrajectoryData DynamicalSystem::step_dynamics(num_t dt)
 {
 	Coordinates &qs_current = trajectory_data.qs_list.back();
 	Coordinates &q_dots_current = trajectory_data.q_dots_list.back();
-	//Coordinates &q_dot_dots_current = trajectory_data.q_dot_dots_list.back();
+	Coordinates &q_dot_dots_current = trajectory_data.q_dot_dots_list.back();
 
 	State s_current{qs_current, q_dots_current};
 
-	State s_next = Integrators::explicit_euler_next(s_current, dt);
+	State s_next{s_current.coordinate_ids};
+	Coordinates q_dot_dots_next{s_current.coordinate_ids};
+	std::tie(s_next, q_dot_dots_next) = Integrators::velocity_verlet_next(s_current, q_dot_dots_current, dt);
+
+
+	State s_next_resolved = container.collision_resolver(s_next);
+	
+	trajectory_data.qs_list.push_back(s_next_resolved.qs);
+	trajectory_data.q_dots_list.push_back(s_next_resolved.q_dots);
+	trajectory_data.q_dot_dots_list.push_back(get_acceleration(s_next_resolved.qs));
+
+	return trajectory_data;
+}
+
+
+TrajectoryData DynamicalSystem::step_dynamics_euler(num_t dt)
+{
+	Coordinates &qs_current = trajectory_data.qs_list.back();
+	Coordinates &q_dots_current = trajectory_data.q_dots_list.back();
+	Coordinates &q_dot_dots_current = trajectory_data.q_dot_dots_list.back();
+
+	State s_current{qs_current, q_dots_current};
+
+	State s_next = Integrators::explicit_euler_next(s_current, q_dot_dots_current, dt);
 	
 
 	State s_next_resolved = container.collision_resolver(s_next);
 	
 	trajectory_data.qs_list.push_back(s_next_resolved.qs);
 	trajectory_data.q_dots_list.push_back(s_next_resolved.q_dots);
+	trajectory_data.q_dot_dots_list.push_back(get_acceleration(s_next_resolved.qs));
 
 	return trajectory_data;
 }

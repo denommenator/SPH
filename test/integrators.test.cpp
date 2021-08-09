@@ -1,3 +1,4 @@
+#include "SPH/vector_field.hpp"
 #include <SPH/pressure_eos.hpp>
 #include <SPH/coordinates.hpp>
 #include <SPH/integrators.hpp>
@@ -35,12 +36,17 @@ SCENARIO("We can initialize a state")
 
 	THEN("We can step the state forward using the integrator euler_next")
 	{
-		State next_state = Integrators::explicit_euler_next(initial_state, .5);
+		Coordinates q_dot_dots{get_acceleration(initial_state.qs)};
+		State next_state = Integrators::explicit_euler_next(initial_state,q_dot_dots, 0.5);
 	}
 
-	// THEN("We can step the state forward using the integrator velocity verlet")
-	// {
-	// 	State next_state = Integrators::velocity_verlet_next(initial_state, .5);
-	// }
+	THEN("We can step the state forward using the integrator velocity verlet")
+	{
+
+		State next_state{ids};
+		Coordinates q_dot_dots_next{ids};
+		std::tie(next_state, q_dot_dots_next) = Integrators::velocity_verlet_next(initial_state, get_acceleration(initial_state.qs), .5);
+		
+	}
 
 }

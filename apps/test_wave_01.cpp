@@ -20,13 +20,13 @@ std::string get_name(int row, int col)
 int main()
 {
 	//setup parameters for simulation
-	num_t box_width = 80;
-	num_t box_height = 20;
+	const num_t box_width = 20;
+	const num_t box_height = 20;
 
-	num_t fluid_depth = 10;
+	const num_t fluid_depth = 10;
 
-	num_t dt = 1./20;
-	num_t time = 1;
+	const num_t dt = 1./60;
+	const num_t time = 2;
 
 
 	//setup container box
@@ -37,8 +37,8 @@ int main()
 	Collisions::Container box = Collisions::BoxContainer(lower_left, upper_right);
 
 	//setup particles
-	int N_rows = fluid_depth;
-	int N_cols = box_width;
+	const int N_rows = fluid_depth;
+	const int N_cols = box_width;
 
 	std::vector<std::string> names{};
 
@@ -57,8 +57,19 @@ int main()
 	for(int row = 0; row < N_rows; row++)
 		for(int col = 0; col < N_cols; col++)
 		{
-			initial_state.qs[get_name(row, col)]  << col, row;
-			initial_state.qs[get_name(row, col)] -= lower_left;
+			if(row % 2 == 0)
+			{
+				initial_state.qs[get_name(row, col)]  << col, row;
+			}
+			else if (col == N_cols)
+			{
+				break;
+			}
+			else
+			{
+				initial_state.qs[get_name(row, col)]  << col + 0.5, row;
+			}
+			initial_state.qs[get_name(row, col)] += lower_left;
 
 			initial_state.q_dots[get_name(row, col)] << 0, 0;
 

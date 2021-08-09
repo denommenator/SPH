@@ -18,13 +18,15 @@ using NumericalScalarArray_m  = Eigen::Matrix<num_t, 1, Eigen::Dynamic>;
 using CollisionList_t = Eigen::Array<bool, 1, Eigen::Dynamic>;
 
 //used for resetting a particle back inside a container by epsilon amount
-constexpr num_t epsilon{.001};
+//constexpr num_t epsilon{.001};
 
 class ContainerWall
 {
 public:
 
-	CollisionList_t detect_collisions(const State &s) const;
+	//CollisionList_t detect_collisions(const State &s) const;
+	CollisionList_t outside_wall(const Coordinates &qs) const;
+	CollisionList_t moving_away(const Coordinates &q_dots) const;
 	
 	Coordinate reflect_velocity(const Coordinate &q_dot) const;
 	Coordinate reset_position(const Coordinate &q) const;
@@ -34,8 +36,7 @@ public:
 
 	void finish_setup();
 private:
-	CollisionList_t outside_wall(const Coordinates &qs) const;
-	CollisionList_t moving_away(const Coordinates &q_dots) const;
+	
 
 	num_t n_dot_p;
 	num_t n_norm_squared;

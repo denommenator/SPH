@@ -28,7 +28,6 @@ public:
 	CoordinateIDManager coordinate_ids;
 	Coordinates qs;
 	Coordinates q_dots;
-	Kernels::SmoothingKernel W{};
 
 
 

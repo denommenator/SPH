@@ -32,22 +32,21 @@ CollisionList_t ContainerWall::moving_away(const Coordinates &q_dots) const
 }
 
 
-CollisionList_t ContainerWall::detect_collisions(const State &s) const
-{
-	return moving_away(s.qs) && outside_wall(s.q_dots);
-}
+// CollisionList_t ContainerWall::detect_collisions(const State &s) const
+// {
+// 	return outside_wall(s.qs) && moving_away(s.q_dots);
+// }
 
 Coordinate ContainerWall::reflect_velocity(const Coordinate &q_dot) const
 {
 	num_t q_dot_n = q_dot.matrix().dot(inward_normal);
 	return q_dot - 2 * q_dot_n / n_norm_squared * inward_normal.array();
-	
 }
 
 Coordinate ContainerWall::reset_position(const Coordinate &q) const
 {
 	num_t q_dot_n = (q.matrix() - point).dot(inward_normal);
-	return q - (1 + epsilon) * q_dot_n / n_norm_squared * inward_normal.array();
+	return q - (1) * q_dot_n / n_norm_squared * inward_normal.array();
 	
 }
 
@@ -69,15 +68,19 @@ State Container::collision_resolver(const State &s) const
 	for(auto&& wall : walls)
 	{
 		
-		CollisionList_t collided = wall.detect_collisions(s);
+		CollisionList_t outside_wall_list = wall.outside_wall(s.qs);
+		CollisionList_t moving_away_list = wall.moving_away(s.q_dots);
 		
 		for(int id=0; id<coordinate_ids.size(); id++)
 		{
-			if (collided(id))
+			if (outside_wall_list(id))
 			{
-
 				s_resolved.qs[id] = wall.reset_position(s.qs[id]);
-				s_resolved.q_dots[id] = wall.reflect_velocity(s.q_dots[id]);
+
+				if(moving_away_list(id))
+				{
+					s_resolved.q_dots[id] = wall.reflect_velocity(s.q_dots[id]);
+				}
 			}
 		}
 	}
