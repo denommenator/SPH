@@ -39,7 +39,7 @@ TrajectoryData DynamicalSystem::run_dynamics(int num_steps, num_t dt)
 
 	for(int n=0; n<num_steps; n++)
 	{
-		step_dynamics(dt);
+		step_dynamics_midpoint_rule(dt);
 
 		bar.set_option(indicators::option::PostfixText{"Dynamics iteration: " 
 													+ std::to_string(n) + "/" 
@@ -55,7 +55,7 @@ TrajectoryData DynamicalSystem::run_dynamics(int num_steps, num_t dt)
 }
 
 
-TrajectoryData DynamicalSystem::step_dynamics(num_t dt)
+TrajectoryData DynamicalSystem::step_dynamics_velocity_verlet(num_t dt)
 {
 	Coordinates &qs_current = trajectory_data.qs_list.back();
 	Coordinates &q_dots_current = trajectory_data.q_dots_list.back();
@@ -72,7 +72,9 @@ TrajectoryData DynamicalSystem::step_dynamics(num_t dt)
 	
 	trajectory_data.qs_list.push_back(s_next_resolved.qs);
 	trajectory_data.q_dots_list.push_back(s_next_resolved.q_dots);
-	trajectory_data.q_dot_dots_list.push_back(get_acceleration(s_next_resolved.qs));
+
+	//note: this is not exactly what we want, as we should resolved the positions first before calculating q_dot_dots_next.
+	trajectory_data.q_dot_dots_list.push_back(q_dot_dots_next);
 
 	return trajectory_data;
 }
@@ -84,7 +86,7 @@ TrajectoryData DynamicalSystem::step_dynamics_euler(num_t dt)
 	Coordinates &q_dots_current = trajectory_data.q_dots_list.back();
 	Coordinates &q_dot_dots_current = trajectory_data.q_dot_dots_list.back();
 
-	State s_current{qs_current, q_dots_current};
+	const State s_current{qs_current, q_dots_current};
 
 	State s_next = Integrators::explicit_euler_next(s_current, q_dot_dots_current, dt);
 	
@@ -98,5 +100,24 @@ TrajectoryData DynamicalSystem::step_dynamics_euler(num_t dt)
 	return trajectory_data;
 }
 
+TrajectoryData DynamicalSystem::step_dynamics_midpoint_rule(num_t dt)
+{
+	Coordinates &qs_current = trajectory_data.qs_list.back();
+	Coordinates &q_dots_current = trajectory_data.q_dots_list.back();
+	Coordinates &q_dot_dots_current = trajectory_data.q_dot_dots_list.back();
+
+	State s_current{qs_current, q_dots_current};
+
+	State s_next = Integrators::midpoint_rule_next(s_current, q_dot_dots_current, dt);
+	
+
+	State s_next_resolved = container.collision_resolver(s_next);
+	
+	trajectory_data.qs_list.push_back(s_next_resolved.qs);
+	trajectory_data.q_dots_list.push_back(s_next_resolved.q_dots);
+	trajectory_data.q_dot_dots_list.push_back(get_acceleration(s_next_resolved.qs));
+
+	return trajectory_data;
+}
 
 } //namespace SPH

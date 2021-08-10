@@ -40,7 +40,8 @@ CollisionList_t ContainerWall::moving_away(const Coordinates &q_dots) const
 Coordinate ContainerWall::reflect_velocity(const Coordinate &q_dot) const
 {
 	num_t q_dot_n = q_dot.matrix().dot(inward_normal);
-	return q_dot - 2 * q_dot_n / n_norm_squared * inward_normal.array();
+	//return q_dot - 2 * q_dot_n / n_norm_squared * inward_normal.array();
+	return Coordinate::Zero();
 }
 
 Coordinate ContainerWall::reset_position(const Coordinate &q) const
@@ -75,11 +76,11 @@ State Container::collision_resolver(const State &s) const
 		{
 			if (outside_wall_list(id))
 			{
-				s_resolved.qs[id] = wall.reset_position(s.qs[id]);
+				s_resolved.qs[id] = wall.reset_position(s_resolved.qs[id]);
 
 				if(moving_away_list(id))
 				{
-					s_resolved.q_dots[id] = wall.reflect_velocity(s.q_dots[id]);
+					s_resolved.q_dots[id] = wall.reflect_velocity(s_resolved.q_dots[id]);
 				}
 			}
 		}

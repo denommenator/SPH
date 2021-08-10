@@ -23,13 +23,28 @@ State explicit_euler_next(const State &s, const Coordinates &q_dot_dots, num_t d
 	const Coordinates& qs{s.qs}, q_dots{s.q_dots};
 	
 	State s_next{s};
-	Coordinates& qs_next{s_next.qs}, q_dots_next{s_next.q_dots};
 
-	qs_next.coordinate_matrix += dt * q_dots.coordinate_matrix;
-	q_dots_next.coordinate_matrix += dt * q_dot_dots.coordinate_matrix;
+	s_next.qs.coordinate_matrix += dt * q_dots.coordinate_matrix;
+	s_next.q_dots.coordinate_matrix += dt * q_dot_dots.coordinate_matrix;
 
 	return s_next;
 }
+
+template<typename EOS_t = ColeEOS>
+State midpoint_rule_next(const State &s, const Coordinates &q_dot_dots, num_t dt, const Kernels::SmoothingKernel W = Kernels::SmoothingKernel(), const EOS_t p = ColeEOS())
+{
+	const State midpoint_state = explicit_euler_next(s, q_dot_dots, dt/2, W, p);
+	const Coordinates midpoint_q_dot_dots = get_acceleration(midpoint_state.qs);
+
+	
+	State s_next{s};
+
+	s_next.qs.coordinate_matrix += dt * midpoint_state.q_dots.coordinate_matrix;
+	s_next.q_dots.coordinate_matrix += dt * midpoint_q_dot_dots.coordinate_matrix;
+
+	return s_next;
+}
+
 
 template<typename EOS_t = ColeEOS>
 std::tuple<State, Coordinates> velocity_verlet_next(const State &s, const Coordinates &q_dot_dots , num_t dt, EOS_t p = ColeEOS())

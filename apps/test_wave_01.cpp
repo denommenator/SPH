@@ -26,7 +26,7 @@ int main()
 	const num_t fluid_depth = 10;
 
 	const num_t dt = 1./60;
-	const num_t time = 2;
+	const num_t time = 10;
 
 
 	//setup container box
@@ -45,6 +45,10 @@ int main()
 	for(int row = 0; row < N_rows; row++)
 		for(int col = 0; col < N_cols; col++)
 		{
+			if( (row % 2 == 1) && (col == N_cols-1))
+			{
+				break;
+			}
 			names.push_back(get_name(row, col));
 		}
 
@@ -61,7 +65,7 @@ int main()
 			{
 				initial_state.qs[get_name(row, col)]  << col, row;
 			}
-			else if (col == N_cols)
+			else if (col == N_cols-1)
 			{
 				break;
 			}
@@ -71,7 +75,7 @@ int main()
 			}
 			initial_state.qs[get_name(row, col)] += lower_left;
 
-			initial_state.q_dots[get_name(row, col)] << 0, 0;
+			initial_state.q_dots[get_name(row, col)] << 5, 0;
 
 		}
 	

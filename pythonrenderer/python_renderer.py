@@ -35,8 +35,9 @@ class Renderer(object):
                                     self.fig, 
                                     self.update, 
                                     frames=trajectory_data.shape[2], 
+                                    interval=1_000/60,
                                     repeat=True, 
-                                    blit=False)
+                                    blit=True)
         plt.show()
 
     def setup_plot(self):

@@ -1,3 +1,6 @@
+#include <string>
+
+
 #include "SPH/coordinates.hpp"
 #include <Eigen/src/Core/util/Constants.h>
 #include <SPH/serializers.hpp>
@@ -61,13 +64,27 @@ CSV& operator<<(CSV &csv, const Coordinates &qs)
 	return csv;
 }
 
+CSV& operator<<(CSV &csv, const std::vector<Coordinates> &qs_list) 
+{
+	for(auto &qs : qs_list)
+		csv << qs;
+	return csv;
+}
+
 void to_csv(TrajectoryData td, std::string filename)
 {
 	CSV export_csv(filename);
 	export_csv << td.current_qs().coordinate_ids;
-	for(auto &qs : td.qs_list)
-		export_csv << qs;
+	export_csv << td.qs_list;
 
+	std::string filename_minus_csv = filename.substr(0,filename.size()-4);
+	CSV export_q_dots(filename_minus_csv+"_q_dots.csv");
+	export_q_dots << td.current_qs().coordinate_ids;
+	export_q_dots << td.q_dots_list;
+
+	CSV export_q_dot_dots(filename_minus_csv+"_q_dot_dots.csv");
+	export_q_dot_dots << td.current_qs().coordinate_ids;
+	export_q_dot_dots << td.q_dot_dots_list;
 
 
 
