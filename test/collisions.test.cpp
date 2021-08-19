@@ -40,7 +40,7 @@ SCENARIO("We can construct a collision wall object", "[collisions]")
 
 	
 
-	State s_resolved = box.collision_resolver(s);
+	State s_resolved = box.resolve_collisions(s);
 
 	THEN("one collision should be detected")
 	{
@@ -48,9 +48,9 @@ SCENARIO("We can construct a collision wall object", "[collisions]")
 		Collisions::CollisionList_t outside_wall_list = box.walls[0].outside_wall(s.qs);
 		Collisions::CollisionList_t moving_away_list = box.walls[0].outside_wall(s.q_dots);
 
-		REQUIRE_FALSE(outside_wall_list(s.coordinate_ids["inside_wall"]));
-		REQUIRE(outside_wall_list(s.coordinate_ids["outside_wall_moving_in"]));
-		REQUIRE(outside_wall_list(s.coordinate_ids["outside_wall_moving_away"]));
+		REQUIRE_FALSE(outside_wall_list[s.coordinate_ids["inside_wall"]]);
+		REQUIRE(outside_wall_list[s.coordinate_ids["outside_wall_moving_in"]]);
+		REQUIRE(outside_wall_list[s.coordinate_ids["outside_wall_moving_away"]]);
 
 	}
 

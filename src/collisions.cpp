@@ -1,4 +1,4 @@
-
+#include <algorithm>
 
 #include <SPH/coordinates.hpp>
 #include <SPH/collisions.hpp>
@@ -16,32 +16,37 @@ void ContainerWall::finish_setup()
 	n_norm_squared = inward_normal.squaredNorm();
 }
 
+bool outside_wall_(const Coordinate &q, const NumericalVector_m inward_normal, num_t n_dot_p) 
+{
+	return inward_normal.dot(q.matrix()) < n_dot_p;
+}
+
 CollisionList_t ContainerWall::outside_wall(const Coordinates &qs) const
 {
-	const NumericalVectorArray_m &qs_mat = qs.coordinate_matrix.matrix();
-	const NumericalScalarArray n_dot_p_array = NumericalScalarArray::Constant(qs.size(), n_dot_p);
-	return (  inward_normal.transpose() * qs_mat  ).array() 
-								< n_dot_p_array;
+	CollisionList_t results{};
+	results.resize(qs.size());
+	std::transform(qs.begin(), qs.end(), results.begin(), [this](const Coordinate &q) {return outside_wall_(q, this->inward_normal, this->n_dot_p);});
+	return results;
+}
+
+bool moving_away_(const Coordinate &q_dot, const NumericalVector_m inward_normal)
+{
+	return inward_normal.dot(q_dot.matrix()) < 0;
 }
 
 CollisionList_t ContainerWall::moving_away(const Coordinates &q_dots) const
 {
-	const NumericalVectorArray_m &q_dots_mat = q_dots.coordinate_matrix.matrix();
-	return ( inward_normal.transpose() * q_dots_mat ).array() < 0;
-
+	CollisionList_t results{};
+	results.resize(q_dots.size());
+	std::transform(q_dots.begin(), q_dots.end(), results.begin(), [this](const Coordinate &q_dot) {return moving_away_(q_dot, this->inward_normal);});
+	return results;
 }
-
-
-// CollisionList_t ContainerWall::detect_collisions(const State &s) const
-// {
-// 	return outside_wall(s.qs) && moving_away(s.q_dots);
-// }
 
 Coordinate ContainerWall::reflect_velocity(const Coordinate &q_dot) const
 {
 	num_t q_dot_n = q_dot.matrix().dot(inward_normal);
-	//return q_dot - 2 * q_dot_n / n_norm_squared * inward_normal.array();
-	return Coordinate::Zero();
+	return q_dot - 2 * q_dot_n / n_norm_squared * inward_normal.array();
+	//return Coordinate::Zero();
 }
 
 Coordinate ContainerWall::reset_position(const Coordinate &q) const
@@ -60,7 +65,7 @@ Container::Container(const std::vector<ContainerWall> &container_walls)
 	}
 }
 
-State Container::collision_resolver(const State &s) const
+State Container::resolve_collisions(const State &s) const
 {
 	State s_resolved{s};
 
@@ -74,11 +79,11 @@ State Container::collision_resolver(const State &s) const
 		
 		for(int id=0; id<coordinate_ids.size(); id++)
 		{
-			if (outside_wall_list(id))
+			if (outside_wall_list[id])
 			{
 				s_resolved.qs[id] = wall.reset_position(s_resolved.qs[id]);
 
-				if(moving_away_list(id))
+				if(moving_away_list[id])
 				{
 					s_resolved.q_dots[id] = wall.reflect_velocity(s_resolved.q_dots[id]);
 				}

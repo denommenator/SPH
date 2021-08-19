@@ -18,8 +18,8 @@ target_link_libraries (SPH_library PRIVATE indicators::indicators)
 target_include_directories(SPH_library PUBLIC ${SPH_BINARY_DIR}/include/SPH ${SPH_SOURCE_DIR}/include/)
 
 
-# All users of this library will need at least C++11
-target_compile_features(SPH_library PUBLIC cxx_std_11)
+# All users of this library will need at least C++17
+target_compile_features(SPH_library PUBLIC cxx_std_17)
 
 
 

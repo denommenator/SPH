@@ -4,7 +4,6 @@
 #include <tuple>
 
 #include "coordinates.hpp"
-#include "state.hpp"
 
 namespace SPH
 {
@@ -15,7 +14,7 @@ using NumericalVector_m = Eigen::Matrix<num_t, DIMENSION, 1>;
 using NumericalVectorArray_m = Eigen::Matrix<num_t, DIMENSION, Eigen::Dynamic>;
 using NumericalScalarArray_m  = Eigen::Matrix<num_t, 1, Eigen::Dynamic>; 
 
-using CollisionList_t = Eigen::Array<bool, 1, Eigen::Dynamic>;
+using CollisionList_t = std::vector<bool>;
 
 //used for resetting a particle back inside a container by epsilon amount
 //constexpr num_t epsilon{.001};
@@ -49,7 +48,7 @@ class Container
 public:
 	Container(const std::vector<ContainerWall> &walls);
 
-	State collision_resolver(const State &s) const;
+	State resolve_collisions(const State &s) const;
 
 	std::vector<ContainerWall> walls;
 };
