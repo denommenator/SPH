@@ -18,12 +18,14 @@
 namespace SPH
 {
 
-const int DIMENSION = 2;
+constexpr int DIMENSION = 2;
 using num_t = double;
 using Coordinate = Eigen::Array<num_t, DIMENSION, 1>;
 using NumericalVector = Eigen::Array<num_t, DIMENSION, 1>;
 using NumericalVectorArray = Eigen::Array<num_t, DIMENSION, Eigen::Dynamic>;
 using NumericalScalarArray  = Eigen::Array<num_t, 1, Eigen::Dynamic>;
+
+using coordinate_array_t = std::vector<Coordinate>;
 
 
 
@@ -44,6 +46,7 @@ public:
 	std::string operator[](int id) const;
 
 	friend bool operator==(const CoordinateIDManager &ids, const CoordinateIDManager &other_ids);
+	friend bool operator!=(const CoordinateIDManager &ids, const CoordinateIDManager &other_ids);
 
 
 
@@ -67,14 +70,23 @@ public:
 	static Coordinates Zero(CoordinateIDManager ids);
 	int size() const;
 
-	NumericalVectorArray::ColXpr operator[](std::string name);
-	const NumericalVectorArray::ConstColXpr operator[](std::string name) const;
-	NumericalVectorArray::ColXpr operator[](int id);
-	const NumericalVectorArray::ConstColXpr operator[](int id) const;
+	Coordinate& operator[](std::string name);
+	const Coordinate& operator[](std::string name) const;
+
+	Coordinate& operator[](int id);
+	const Coordinate& operator[](int id) const;
+
+	coordinate_array_t::iterator begin();
+	coordinate_array_t::const_iterator begin() const;
+	coordinate_array_t::const_iterator cbegin() const;
+	coordinate_array_t::iterator end();
+	coordinate_array_t::const_iterator end() const;
+	coordinate_array_t::const_iterator cend() const;
+
 
 	
 	CoordinateIDManager coordinate_ids;
-	NumericalVectorArray coordinate_matrix;
+	coordinate_array_t coordinate_array;
 
 };
 

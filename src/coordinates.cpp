@@ -41,47 +41,95 @@ bool operator==(const CoordinateIDManager &ids, const CoordinateIDManager &other
 	return ids.coordinate_names == other_ids.coordinate_names;
 }
 
+bool operator!=(const CoordinateIDManager &ids, const CoordinateIDManager &other_ids)
+{
+	return ids.coordinate_names != other_ids.coordinate_names;
+}
+
 
 
 Coordinates::Coordinates(CoordinateIDManager ids)
-:	coordinate_ids{ids},
-	coordinate_matrix{DIMENSION, ids.size()}
-{}
+:	coordinate_ids{ids}
+{
+	coordinate_array = coordinate_array_t(ids.size(), Coordinate{});
+}
 
 
 Coordinates Coordinates::Zero(CoordinateIDManager ids)
 {
 	Coordinates Zero = Coordinates(ids);
-	Zero.coordinate_matrix = NumericalVectorArray::Zero(DIMENSION, ids.size());
+	Zero.coordinate_array = coordinate_array_t(ids.size(), Coordinate::Zero());
 	return Zero;
 }
 
 
-NumericalVectorArray::ColXpr Coordinates::operator[](std::string name)
+Coordinate& Coordinates::operator[](std::string name)
 {
 	int index = coordinate_ids[name];
-	return coordinate_matrix.col(index);
+	return coordinate_array[index];
 }
 
-const NumericalVectorArray::ConstColXpr Coordinates::operator[](std::string name) const
+const Coordinate& Coordinates::operator[](std::string name) const
 {
 	int index = coordinate_ids[name];
-	return coordinate_matrix.col(index);
+	return coordinate_array[index];
 }
 
-NumericalVectorArray::ColXpr Coordinates::operator[](int id)
+Coordinate& Coordinates::operator[](int id)
 {
-	return coordinate_matrix.col(id);
+	return coordinate_array[id];
 }
 
-const NumericalVectorArray::ConstColXpr Coordinates::operator[](int id) const
+const Coordinate& Coordinates::operator[](int id) const
 {
-	return coordinate_matrix.col(id);
+	return coordinate_array[id];
+}
+
+coordinate_array_t::iterator Coordinates::begin()
+{
+	return coordinate_array.begin();
+}
+
+coordinate_array_t::const_iterator Coordinates::begin() const
+{
+	return coordinate_array.begin();
+}
+
+coordinate_array_t::const_iterator Coordinates::cbegin() const
+{
+	return coordinate_array.cbegin();
+}
+
+coordinate_array_t::iterator Coordinates::end()
+{
+	return coordinate_array.end();
+}
+
+coordinate_array_t::const_iterator Coordinates::end() const
+{
+	return coordinate_array.end();
+}
+
+coordinate_array_t::const_iterator Coordinates::cend() const
+{
+	return coordinate_array.cend();
 }
 
 bool operator==(const Coordinates &qs, const Coordinates &qs_other)
 {
-	return (qs.coordinate_ids == qs_other.coordinate_ids) && ( qs.coordinate_matrix.isApprox(qs_other.coordinate_matrix) );
+	if(qs.coordinate_ids != qs_other.coordinate_ids)
+		return false;
+
+	auto q_other_it = qs_other.cbegin();
+	for(auto&& q : qs)
+	{
+		if( not q.isApprox(*q_other_it))
+			return false;
+		q_other_it++;
+	}
+
+	return true;
+
 }
 
 int Coordinates::size() const
@@ -94,7 +142,7 @@ std::ostream& operator<<(std::ostream &strm, const Coordinates &qs)
 	int i=0;
 	for(auto name : qs.coordinate_ids.coordinate_names)
 	{
-		strm << "\ncoordinate: \"" << name << "\":\n" << qs.coordinate_matrix.col(i);
+		strm << "\ncoordinate: \"" << name << "\":\n" << qs.coordinate_array[i];
 		i++;
 	}
 	return strm;

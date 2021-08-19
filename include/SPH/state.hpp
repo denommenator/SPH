@@ -2,10 +2,7 @@
 
 #include <cmath>
 
-#include "pressure_eos.hpp"
-#include "scalar_field.hpp"
 #include "coordinates.hpp"
-#include "kernels.hpp"
 
 namespace SPH
 {

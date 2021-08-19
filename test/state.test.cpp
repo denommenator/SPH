@@ -8,7 +8,7 @@
 
 using namespace SPH;
 
-SCENARIO("we can initialize a state vector with coordinate ids and define qs and q_dots later")
+SCENARIO("we can initialize a state vector with coordinate ids and define qs and q_dots later", "[state]")
 {
 	SECTION("We can initialize a state vector from qs and q_dots")
 	{
@@ -39,7 +39,7 @@ SCENARIO("we can initialize a state vector with coordinate ids and define qs and
 }
 
 
-SCENARIO("we can initialize a state vector with qs and q_dots")
+SCENARIO("we can initialize a state vector with qs and q_dots", "[state]")
 {
 	SECTION("We can initialize a state vector from qs and q_dots")
 	{

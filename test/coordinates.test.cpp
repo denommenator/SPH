@@ -10,7 +10,7 @@
 
 using namespace SPH;
 
-SCENARIO("Coordinates can be initialized from a CoordinateIDManager")
+SCENARIO("Coordinates can be initialized from a CoordinateIDManager", "[coordinates]")
 {
 	
 	CoordinateIDManager ids = {"01", "02"};
@@ -26,6 +26,31 @@ SCENARIO("Coordinates can be initialized from a CoordinateIDManager")
 
 	REQUIRE(qs["02"](0)==3);
 	REQUIRE(qs["02"](1)==4);
+
+	THEN("We can range-based for loop over the coordinates")
+	{	
+		int i{1};
+		for(auto&& q : qs)
+		{
+			REQUIRE(q(0) == i);
+			REQUIRE(q(1) == i + 1);
+			i += 2;
+		}
+
+	}
+
+	AND_THEN("We can use the Coordinates comparison operators")
+	{
+		REQUIRE(qs == qs);
+	}
+
+
+	AND_THEN("We can initialize a zero Coordinates")
+	{
+		Coordinates zero = Coordinates::Zero(ids);
+		for(auto q : zero)
+			REQUIRE(q.isApprox(Coordinate::Zero()));
+	}
 
 };
 
