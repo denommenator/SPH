@@ -1,3 +1,8 @@
+#include <iterator> // For std::forward_iterator_tag
+#include <cstddef>  // For std::ptrdiff_t
+
+
+
 #include <SPH/coordinates.hpp>
 #include <vector>
 #include <initializer_list>
@@ -165,5 +170,16 @@ std::ostream& operator<<(std::ostream &strm, const State &s)
 	strm << "q_dots" << s.q_dots << std::endl;
 	return strm;
 }
+
+State::CoordinatePairIterator::CoordinatePairIterator(const Coordinates::iterator& qs_it, const Coordinates::iterator& q_dots_it)
+	    :qs_it{qs_it}, q_dots_it{q_dots_it}
+	    {}
+
+CoordinatePair State::CoordinatePairIterator::operator*() const { return CoordinatePair(*(qs_it), *(q_dots_it)); }
+
+State::CoordinatePairIterator State::CoordinatePairIterator::operator++() {++qs_it; ++q_dots_it; return *this;}
+
+bool State::CoordinatePairIterator::operator!=(const CoordinatePairIterator& rhs) {return (qs_it != rhs.qs_it);}
+
 
 } //namespace SPH

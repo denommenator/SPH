@@ -82,6 +82,7 @@ SCENARIO("we can initialize a state vector with coordinate ids and define qs and
 		REQUIRE(initial_state.q_dots == initial_state.q_dots);
 		REQUIRE_FALSE(initial_state.qs == q_not);
 
+
 	}
 }
 
@@ -112,7 +113,26 @@ SCENARIO("we can initialize a state vector with qs and q_dots", "[state]")
 		REQUIRE_FALSE(initial_state.qs == q_not);
 
 		
+		THEN("We can iterate through the state using range-based for loop")
+		{
+			std::vector<Coordinate> q_coords = {qs["01"], qs["02"], qs["03"]};
+			std::vector<Coordinate> q_dot_coords = {q_dots["01"], q_dots["02"], q_dots["03"]};
+			
+			auto q_coords_it = q_coords.begin();
+			auto q_dot_coords_it = q_dot_coords.begin();
 
+			for(auto&& s : initial_state)
+			{
+				REQUIRE(s.q.isApprox(*(q_coords_it)));
+				q_coords_it++;
+			}
+
+			for(auto&& s : initial_state)
+			{
+				REQUIRE(s.q_dot.isApprox(*(q_dot_coords_it)));
+				q_dot_coords_it++;
+			}
+		}
 	}
 }
 

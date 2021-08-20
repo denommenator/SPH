@@ -24,7 +24,8 @@ State explicit_euler_next(const State &s, const Coordinates &q_dot_dots, num_t d
 	
 	State s_next{s};
 
-	s_next.qs.coordinate_matrix += dt * q_dots.coordinate_matrix;
+	for(Coordinate& q : qs)
+		q += dt * q_dots.coordinate_matrix;
 	s_next.q_dots.coordinate_matrix += dt * q_dot_dots.coordinate_matrix;
 
 	return s_next;

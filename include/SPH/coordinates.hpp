@@ -7,6 +7,7 @@
 #include <set>
 #include <map>
 #include <tuple>
+#include <utility>
 
 #include <Eigen/Dense>
 #include <Eigen/src/Core/util/Constants.h>
@@ -62,7 +63,6 @@ public:
 class Coordinates 
 {
 public:
-
 	Coordinates(CoordinateIDManager ids);
 	
 	friend bool operator==(const Coordinates &qs, const Coordinates &qs_other);
@@ -76,6 +76,8 @@ public:
 	Coordinate& operator[](int id);
 	const Coordinate& operator[](int id) const;
 
+
+	using iterator = coordinate_array_t::iterator;
 	coordinate_array_t::iterator begin();
 	coordinate_array_t::const_iterator begin() const;
 	coordinate_array_t::const_iterator cbegin() const;
@@ -92,6 +94,17 @@ public:
 
 
 std::ostream& operator<<(std::ostream &strm, const Coordinates &qs);
+
+struct CoordinatePair
+{
+	CoordinatePair(Coordinate& q, Coordinate& q_dot)
+	:q{q}, q_dot{q_dot} 
+	{}
+
+	Coordinate& q;
+	Coordinate& q_dot;
+};
+
 
 
 class State
@@ -111,9 +124,31 @@ public:
 	Coordinates qs;
 	Coordinates q_dots;
 
+	struct CoordinatePairIterator
+	{
+		using iterator_category = std::forward_iterator_tag;
+	    using difference_t   	= std::ptrdiff_t;
+	    using value_type        = CoordinatePair;
+	    using pointer           = value_type*;
+	    using reference         = value_type&;
 
+	    CoordinatePairIterator(const Coordinates::iterator& qs_it, const Coordinates::iterator& q_dots_it);
 
-};
+	    CoordinatePair operator*() const;
+
+	    CoordinatePairIterator operator++();
+
+	    bool operator!=(const CoordinatePairIterator& rhs);
+	    
+	    Coordinates::iterator qs_it;
+	    Coordinates::iterator q_dots_it;
+
+	};
+
+		CoordinatePairIterator begin() {return CoordinatePairIterator(qs.begin(), q_dots.begin());}
+		CoordinatePairIterator end() {return CoordinatePairIterator(qs.end(), q_dots.end());}
+
+	};
 
 std::ostream& operator<<(std::ostream &strm, const State &s);
 
