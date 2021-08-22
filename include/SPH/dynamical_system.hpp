@@ -5,7 +5,6 @@
 #include "coordinates.hpp"
 #include "collisions.hpp"
 #include "trajectory_data.hpp"
-#include "state.hpp"
 
 
 namespace SPH

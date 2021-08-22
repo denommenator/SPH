@@ -4,7 +4,6 @@
 #include <SPH/collisions.hpp>
 #include <SPH/dynamical_system.hpp>
 #include <SPH/serializers.hpp>
-#include <SPH/state.hpp>
 
 using namespace SPH;
 

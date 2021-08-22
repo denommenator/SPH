@@ -19,10 +19,18 @@ Coordinate W_gaussian_gradient_q(Coordinate q, Coordinate p, num_t h)
 
 NumericalScalarArray W_gaussian_vectorized(Coordinates qs, Coordinate r, num_t h)
 {
-	NumericalVectorArray &qs_mat{qs.coordinate_matrix};
-	//return  exp(-(q-p).matrix().squaredNorm() / (h*h)) / (h*h * pi); 
+	std::vector<num_t> result_std_array;
+	result_std_array.resize(qs.size());
+	
+	auto W_gauss_func = [r, h](Coordinate q){return W_gaussian(q, r, h);};
+	
+	std::transform(qs.begin(), qs.end(), result_std_array.begin(), W_gauss_func);
 
-	return exp((-(qs_mat.colwise() - r).matrix().colwise().squaredNorm()/(h*h)).array()) / (h*h * pi);
+
+	Eigen::Map<NumericalScalarArray> result_eigen_array(result_std_array.data(), 1, qs.size());
+	return result_eigen_array;
+
+
 
 	//return (-(qs_mat.matrix().colwise()-r).matrix().colwise().squaredNorm()/ (h*h) ).exp() / (h*h);
 }

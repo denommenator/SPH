@@ -28,9 +28,6 @@ public:
 
 	//heat capacity ratio
 	num_t gamma;
-
-	
-
 } ;
 
 

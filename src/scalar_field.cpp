@@ -36,16 +36,18 @@ num_t ScalarField::operator()(Coordinate r)
 num_t ScalarField::non_vectorized(Coordinate r)
 {
 	num_t F_r{0};
-	NumericalVectorArray &coord_matrix = qs.coordinate_matrix;
 	NumericalScalarArray &masses = qs.coordinate_ids.coordinate_masses;
 	NumericalScalarArray &densities = qs.coordinate_ids.coordinate_densities;
 
 	//Eigen will support range-based looping via this interface. Currently only in devel though
 	//for (auto col : qs.coordinate_matrix.colwise())
-	for(int coord_index=0; coord_index < coord_matrix.cols(); coord_index++)
+	// for(int coord_index=0; coord_index < coord_matrix.cols(); coord_index++)
+	// {
+	int idx{0};
+	for(auto&& q : qs)
 	{
-		NumericalVectorArray::ColXpr q = qs.coordinate_matrix.col(coord_index);
-		F_r += weights(coord_index) * masses(coord_index) / densities(coord_index) * W(q, r, 1);
+		F_r += weights(idx) * masses(idx) / densities(idx) * W(q, r, 1);
+		idx++;
 	}
 
 	return F_r;

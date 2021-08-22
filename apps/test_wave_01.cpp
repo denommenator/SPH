@@ -3,7 +3,6 @@
 
 
 #include <SPH/coordinates.hpp>
-#include <SPH/state.hpp>
 #include <SPH/collisions.hpp>
 #include <SPH/dynamical_system.hpp>
 #include <SPH/serializers.hpp>

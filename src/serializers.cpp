@@ -57,9 +57,14 @@ CSV& operator<<(CSV &csv, const Coordinates &qs)
 {
 	const static Eigen::IOFormat CSVFormat(Eigen::StreamPrecision, 0, ", ");
 	
-	const Eigen::Matrix<num_t, DIMENSION, Eigen::Dynamic> qs_matrix = qs.coordinate_matrix;
-	const Eigen::Map<const Eigen::Matrix<num_t, 1, Eigen::Dynamic>> qs_flattened(qs_matrix.data(), qs.coordinate_matrix.size());
-	csv.export_csv << qs_flattened.format(CSVFormat);
+	Eigen::Matrix<num_t, 1, Eigen::Dynamic> qs_matrix(DIMENSION * qs.size());
+	int idx{0};
+	for(auto&& q : qs)
+	{
+		qs_matrix.block(0, idx, 1, DIMENSION) << q.transpose();
+		idx += DIMENSION;
+	}
+	csv.export_csv << qs_matrix.format(CSVFormat);
 	csv << "\n";
 	return csv;
 }

@@ -78,6 +78,7 @@ public:
 
 
 	using iterator = coordinate_array_t::iterator;
+	using const_iterator = coordinate_array_t::const_iterator;
 	coordinate_array_t::iterator begin();
 	coordinate_array_t::const_iterator begin() const;
 	coordinate_array_t::const_iterator cbegin() const;
@@ -123,31 +124,6 @@ public:
 	CoordinateIDManager coordinate_ids;
 	Coordinates qs;
 	Coordinates q_dots;
-
-	struct CoordinatePairIterator
-	{
-		using iterator_category = std::forward_iterator_tag;
-	    using difference_t   	= std::ptrdiff_t;
-	    using value_type        = CoordinatePair;
-	    using pointer           = value_type*;
-	    using reference         = value_type&;
-
-	    CoordinatePairIterator(const Coordinates::iterator& qs_it, const Coordinates::iterator& q_dots_it);
-
-	    CoordinatePair operator*() const;
-
-	    CoordinatePairIterator operator++();
-
-	    bool operator!=(const CoordinatePairIterator& rhs);
-	    
-	    Coordinates::iterator qs_it;
-	    Coordinates::iterator q_dots_it;
-
-	};
-
-		CoordinatePairIterator begin() {return CoordinatePairIterator(qs.begin(), q_dots.begin());}
-		CoordinatePairIterator end() {return CoordinatePairIterator(qs.end(), q_dots.end());}
-
 	};
 
 std::ostream& operator<<(std::ostream &strm, const State &s);

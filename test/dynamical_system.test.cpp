@@ -4,7 +4,6 @@
 #include <SPH/coordinates.hpp>
 #include <SPH/collisions.hpp>
 #include <SPH/dynamical_system.hpp>
-#include <SPH/state.hpp>
 
 
 using namespace SPH;
@@ -36,5 +35,6 @@ SCENARIO("Initialize a dynamical system", "[dynamicalsystem]")
 
 	CAPTURE(dynamical_system.trajectory_data.qs_list.back());
 	CAPTURE(dynamical_system.trajectory_data.q_dots_list.back());
+	CAPTURE(dynamical_system.trajectory_data.q_dot_dots_list.back());
 	
 }

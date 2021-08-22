@@ -2,7 +2,6 @@
 #include <fstream>
 
 
-#include "dynamical_system.hpp"
 #include "coordinates.hpp"
 #include "trajectory_data.hpp"
 
